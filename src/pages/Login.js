@@ -4,8 +4,9 @@ import Icon from 'react-native-vector-icons/Feather';
 import { Input } from 'react-native-elements';
 
 import styles from '../styles/Login';
+import * as color from '../styles/colorStyles';
 
-const Login = () => {
+const Login = ({ navigation }) => {
    return (
       <View style={styles.container}>
          <View style={styles.containerTop}>
@@ -14,21 +15,45 @@ const Login = () => {
          <View style={styles.containerBottom}>
             <Text style={styles.loginText}>Login</Text>
             <Text style={styles.loginInfoText}>Login to your existing account to access all the features in Zwallet.</Text>
-            <TextInput style={styles.input} placeholder="Enter your e-mail" />
-            {/* <Input
-               placeholder="Enter email"
+            {/* <TextInput style={styles.input} placeholder="Enter your e-mail" /> */}
+            <Input
+               placeholder="Enter your e-mail"
                leftIcon={
                   <Icon
                      name="mail"
-                     size={24}
-                     color="black"
+                     size={20}
+                     color={color.input}
                   />
                }
-            /> */}
+               inputContainerStyle={styles.input}
+               inputStyle={styles.input}
+               placeholderTextColor={color.input}
+            />
             <View>
-               <TextInput style={styles.input} placeholder="Enter your password" secureTextEntry />
+               {/* <TextInput style={styles.input} placeholder="Enter your password" secureTextEntry /> */}
+               <Input
+                  placeholder="Enter your password"
+                  leftIcon={
+                     <Icon
+                        name="lock"
+                        size={20}
+                        color={color.input}
+                     />
+                  }
+                  rightIcon={
+                     <Icon
+                        name="eye-off"
+                        size={18}
+                        color={color.input}
+                     />
+                  }
+                  secureTextEntry={true}
+                  inputContainerStyle={styles.input}
+                  inputStyle={styles.input}
+                  placeholderTextColor={color.input}
+               />
                <Pressable>
-                  <Text style={{ textAlign: 'right', color: 'rgba(58, 61, 66, 0.8)', marginTop: 15 }}>Forgot password?</Text>
+                  <Text style={styles.textForgotPass}>Forgot password?</Text>
                </Pressable>
             </View>
             <Pressable style={styles.buttonLogin}>
@@ -36,7 +61,7 @@ const Login = () => {
             </Pressable>
             <View style={styles.textSignUpContainer}>
                <Text style={styles.textSignUp}>Don’t have an account? Let’s </Text>
-               <Pressable><Text style={styles.textSignUpLink}>Sign Up</Text></Pressable>
+               <Pressable onPress={() => navigation.navigate('Register')}><Text style={styles.textSignUpLink}>Sign Up</Text></Pressable>
             </View>
          </View>
       </View>

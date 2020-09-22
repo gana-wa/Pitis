@@ -39,11 +39,17 @@ const styles = StyleSheet.create({
       textAlign: 'center',
    },
    input: {
-      borderBottomWidth: 1.5,
-      borderColor: color.borderInput,
+      fontSize: 16,
+      borderColor: color.input,
+   },
+   textForgotPass: {
+      textAlign: 'right',
+      color: 'rgba(58, 61, 66, 0.8)',
+      marginTop: 15,
    },
    buttonLogin: {
       width: '100%',
+      alignSelf: 'center',
       backgroundColor: color.primary,
       height: 57,
       justifyContent: 'center',
