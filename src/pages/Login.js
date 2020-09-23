@@ -2,11 +2,15 @@ import React from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Input } from 'react-native-elements';
+import { useForm, Controller } from 'react-hook-form';
 
 import styles from '../styles/Login';
 import * as color from '../styles/colorStyles';
 
 const Login = ({ navigation }) => {
+   const { control, handleSubmit, errors } = useForm();
+   const onSubmit = data => console.log(data);
+
    return (
       <View style={styles.container}>
          <View style={styles.containerTop}>
@@ -15,50 +19,83 @@ const Login = ({ navigation }) => {
          <View style={styles.containerBottom}>
             <Text style={styles.loginText}>Login</Text>
             <Text style={styles.loginInfoText}>Login to your existing account to access all the features in Zwallet.</Text>
-            {/* <TextInput style={styles.input} placeholder="Enter your e-mail" /> */}
-            <Input
-               placeholder="Enter your e-mail"
-               leftIcon={
-                  <Icon
-                     name="mail"
-                     size={20}
-                     color={color.input}
-                  />
-               }
-               inputContainerStyle={styles.input}
-               inputStyle={styles.input}
-               placeholderTextColor={color.input}
-            />
             <View>
-               {/* <TextInput style={styles.input} placeholder="Enter your password" secureTextEntry /> */}
-               <Input
-                  placeholder="Enter your password"
-                  leftIcon={
-                     <Icon
-                        name="lock"
-                        size={20}
-                        color={color.input}
+               <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                     <Input
+                        placeholder="Enter your e-mail"
+                        leftIcon={
+                           <Icon
+                              name="mail"
+                              size={20}
+                              color={color.input}
+                           />
+                        }
+                        inputContainerStyle={styles.input}
+                        inputStyle={styles.input}
+                        placeholderTextColor={color.input}
+                        onBlur={onBlur}
+                        onChangeText={text => onChange(text)}
+                        value={value}
                      />
-                  }
-                  rightIcon={
-                     <Icon
-                        name="eye-off"
-                        size={18}
-                        color={color.input}
-                     />
-                  }
-                  secureTextEntry={true}
-                  inputContainerStyle={styles.input}
-                  inputStyle={styles.input}
-                  placeholderTextColor={color.input}
+                  )}
+                  name="email"
+                  rules={{ required: true }}
+                  defaultValue=""
                />
-               <Pressable>
+               {/* {errors.email && <Text>Email is required.</Text>} */}
+            </View>
+            <View>
+               <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                     <Input
+                        placeholder="Enter your password"
+                        leftIcon={
+                           <Icon
+                              name="lock"
+                              size={20}
+                              color={color.input}
+                           />
+                        }
+                        rightIcon={
+                           <Icon
+                              name="eye-off"
+                              size={18}
+                              color={color.input}
+                           />
+                        }
+                        secureTextEntry={true}
+                        inputContainerStyle={styles.input}
+                        inputStyle={styles.input}
+                        placeholderTextColor={color.input}
+                        onBlur={onBlur}
+                        onChangeText={text => onChange(text)}
+                        value={value}
+                     />
+                  )}
+                  name="password"
+                  rules={{ required: true }}
+                  defaultValue=""
+               />
+               {/* {errors.password && <Text>Password is required.</Text>} */}
+               <Pressable onPress={() => navigation.navigate('ResetPassEmail')}>
                   <Text style={styles.textForgotPass}>Forgot password?</Text>
                </Pressable>
             </View>
-            <Pressable style={styles.buttonLogin}>
+            {errors.password || errors.email ? (
+               <View style={styles.buttonLoginDisabled} onPress={handleSubmit(onSubmit)}>
+                  <Text style={styles.buttonLoginTextDisabled}>Login</Text>
+               </View>
+            ) : (
+                  <Pressable style={styles.buttonLogin} onPress={handleSubmit(onSubmit)}>
+                     <Text style={styles.buttonLoginText}>Login</Text>
+                  </Pressable>
+               )}
+            {/* <Pressable style={styles.buttonLogin} onPress={handleSubmit(onSubmit)}>
                <Text style={styles.buttonLoginText}>Login</Text>
-            </Pressable>
+            </Pressable> */}
             <View style={styles.textSignUpContainer}>
                <Text style={styles.textSignUp}>Don’t have an account? Let’s </Text>
                <Pressable onPress={() => navigation.navigate('Register')}><Text style={styles.textSignUpLink}>Sign Up</Text></Pressable>

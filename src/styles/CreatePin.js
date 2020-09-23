@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
       backgroundColor: color.backgroud,
    },
    containerTop: {
-      flex: 1,
+      flex: 2,
       justifyContent: 'center',
       alignItems: 'center',
    },
@@ -18,14 +18,14 @@ const styles = StyleSheet.create({
       fontSize: 26,
    },
    containerBottom: {
-      flex: 5,
+      flex: 8,
       backgroundColor: color.white,
       elevation: 3,
       borderTopRightRadius: 30,
       borderTopLeftRadius: 30,
       paddingHorizontal: '8%',
-      justifyContent: 'space-evenly',
-      // justifyContent: 'space-around',
+      // justifyContent: 'space-evenly',
+      justifyContent: 'space-around',
    },
    loginText: {
       color: color.dark,
@@ -85,6 +85,17 @@ const styles = StyleSheet.create({
    textSignUpLink: {
       color: color.primary,
       fontSize: 16,
+   },
+   // pin
+   pinContainer: {
+      alignSelf: 'center',
+   },
+   pinCell: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: color.input,
+      height: 58,
+      width: 47,
    },
 });
 
