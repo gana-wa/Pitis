@@ -1,15 +1,43 @@
-import React from 'react';
-import { View, Text, TextInput, Pressable } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Pressable, ToastAndroid } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Input } from 'react-native-elements';
 import { useForm, Controller } from 'react-hook-form';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../redux/actions/auth';
 
 import styles from '../styles/Login';
 import * as color from '../styles/colorStyles';
 
 const Login = ({ navigation }) => {
+   const [message, setMessage] = useState('');
+   const [showPassword, setShowPassword] = useState(true);
+   const [logIn, setLogIn] = useState(false);
+   const dispatch = useDispatch();
+
+   const { msg, isLoggedIn } = useSelector(
+      (state) => state.auth
+   );
+
+   useEffect(() => {
+      if (isLoggedIn) {
+         return navigation.navigate('Home');
+      }
+      if (msg) {
+         setMessage(msg);
+         ToastAndroid.show(msg, ToastAndroid.SHORT);
+      }
+   }, [isLoggedIn, navigation, msg]);
+
+   const hanleShowPassword = () => {
+      setShowPassword(!showPassword);
+   };
+
    const { control, handleSubmit, errors } = useForm();
-   const onSubmit = data => console.log(data);
+
+   const onSubmit = (data) => {
+      dispatch(login(data));
+   };
 
    return (
       <View style={styles.container}>
@@ -38,6 +66,7 @@ const Login = ({ navigation }) => {
                         onBlur={onBlur}
                         onChangeText={text => onChange(text)}
                         value={value}
+                        keyboardType="email-address"
                      />
                   )}
                   name="email"
@@ -61,12 +90,13 @@ const Login = ({ navigation }) => {
                         }
                         rightIcon={
                            <Icon
-                              name="eye-off"
+                              onPress={hanleShowPassword}
+                              name={showPassword ? "eye-off" : "eye"}
                               size={18}
                               color={color.input}
                            />
                         }
-                        secureTextEntry={true}
+                        secureTextEntry={showPassword}
                         inputContainerStyle={styles.input}
                         inputStyle={styles.input}
                         placeholderTextColor={color.input}
@@ -85,7 +115,7 @@ const Login = ({ navigation }) => {
                </Pressable>
             </View>
             {errors.password || errors.email ? (
-               <View style={styles.buttonLoginDisabled} onPress={handleSubmit(onSubmit)}>
+               <View style={styles.buttonLoginDisabled}>
                   <Text style={styles.buttonLoginTextDisabled}>Login</Text>
                </View>
             ) : (

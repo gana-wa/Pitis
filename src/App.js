@@ -3,6 +3,9 @@ import 'react-native-gesture-handler';
 // import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Provider } from 'react-redux';
+import configureStore from './redux/store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 import * as color from './styles/colorStyles';
 
@@ -17,6 +20,9 @@ import History from './pages/History';
 import FindReceiver from './pages/FindReceiver';
 import AmountInput from './pages/AmountInput';
 import PinConfirmation from './pages/PinConfirmation';
+import TransferDetail from './pages/TransferDetail';
+
+const { persistor, store } = configureStore();
 
 const Stack = createStackNavigator();
 
@@ -41,40 +47,42 @@ const headerStyle = {
 
 const App = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-        <Stack.Screen name="History" component={History} options={{
-          headerStyle: headerStyle.headerStyleBlue,
-          headerTintColor: headerStyle.headerTintColorBlue,
-        }} />
-        <Stack.Screen name="FindReceiver" component={FindReceiver} options={{
-          headerStyle: headerStyle.headerStyleWhite,
-          headerTintColor: headerStyle.headerTintColorWhite,
-          title: 'Find Receiver',
-        }} />
-        <Stack.Screen name="AmountInput" component={AmountInput} options={{
-          headerStyle: {
-            backgroundColor: color.primary,
-            elevation: 0,
-            height: 80,
-          },
-          headerTintColor: color.white,
-          title: 'Transfer',
-        }} />
-        <Stack.Screen name="PinConfirmation" component={PinConfirmation} options={{
-          headerStyle: headerStyle.headerStyleWhite,
-          headerTintColor: headerStyle.headerTintColorWhite,
-          title: 'Enter Your PIN',
-        }} />
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
-        <Stack.Screen name="CreatePin" component={CreatePin} options={{ headerShown: false }} />
-        <Stack.Screen name="CreatePinSuccess" component={CreatePinSuccess} options={{ headerShown: false }} />
-        <Stack.Screen name="ResetPassEmail" component={ResetPassEmail} options={{ headerShown: false }} />
-        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="History" component={History} options={{
+            headerStyle: headerStyle.headerStyleBlue,
+            headerTintColor: headerStyle.headerTintColorBlue,
+          }} />
+          <Stack.Screen name="FindReceiver" component={FindReceiver} options={{
+            headerStyle: headerStyle.headerStyleWhite,
+            headerTintColor: headerStyle.headerTintColorWhite,
+            title: 'Find Receiver',
+          }} />
+          <Stack.Screen name="AmountInput" component={AmountInput} options={{
+            headerStyle: {
+              backgroundColor: color.primary,
+              elevation: 0,
+              height: 80,
+            },
+            headerTintColor: color.white,
+            title: 'Transfer',
+          }} />
+          <Stack.Screen name="PinConfirmation" component={PinConfirmation} options={{
+            headerStyle: headerStyle.headerStyleWhite,
+            headerTintColor: headerStyle.headerTintColorWhite,
+            title: 'Enter Your PIN',
+          }} />
+          <Stack.Screen name="CreatePin" component={CreatePin} options={{ headerShown: false }} />
+          <Stack.Screen name="CreatePinSuccess" component={CreatePinSuccess} options={{ headerShown: false }} />
+          <Stack.Screen name="ResetPassEmail" component={ResetPassEmail} options={{ headerShown: false }} />
+          <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 };
 
