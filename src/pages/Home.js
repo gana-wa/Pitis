@@ -40,8 +40,9 @@ const Home = ({ navigation }) => {
                      color="#608DE2"
                   />
                }
-               titleStyle={{ color: color.dark }}
+               titleStyle={{ color: color.dark, marginLeft: 16, }}
                buttonStyle={styles.buttonTransferTopUp}
+               onPress={() => navigation.navigate('FindReceiver')}
             />
             <Button
                title="Top Up"
@@ -52,7 +53,7 @@ const Home = ({ navigation }) => {
                      color="#608DE2"
                   />
                }
-               titleStyle={{ color: color.dark }}
+               titleStyle={{ color: color.dark, marginLeft: 16, }}
                buttonStyle={styles.buttonTransferTopUp}
             />
          </View>

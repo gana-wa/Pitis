@@ -14,6 +14,7 @@ import ResetPassEmail from './pages/ResetPassEmail';
 import ResetPassword from './pages/ResetPassword';
 import Home from './pages/Home';
 import History from './pages/History';
+import FindReceiver from './pages/FindReceiver';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,17 @@ const App = () => {
             height: 80,
           },
           headerTintColor: color.white,
+        }} />
+        <Stack.Screen name="FindReceiver" component={FindReceiver} options={{
+          headerStyle: {
+            backgroundColor: color.backgroud,
+            elevation: 0,
+            // borderBottomLeftRadius: 20,
+            // borderBottomRightRadius: 20,
+            height: 80,
+          },
+          headerTintColor: color.dark,
+          title: 'Find Receiver',
         }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
