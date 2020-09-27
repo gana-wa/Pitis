@@ -26,7 +26,7 @@ const AmountInput = ({ navigation }) => {
                </View>
             </View>
          </View>
-         <View style={{ flex: 1, justifyContent: 'space-between' }}>
+         <View style={styles.containerMainContent}>
             <View>
                <TextInput
                   placeholder="0.00"
@@ -103,6 +103,10 @@ const styles = StyleSheet.create({
    textPhone: {
       color: '#7A7886',
       fontSize: 14,
+   },
+   containerMainContent: {
+      flex: 1,
+      justifyContent: 'space-between',
    },
    inpuBalance: {
       marginTop: '5%',

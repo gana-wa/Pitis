@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
-import { Input } from 'react-native-elements';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 
 import styles from '../styles/CreatePin';
@@ -21,7 +19,7 @@ const CreatePin = ({ navigation }) => {
                containerStyle={styles.pinContainer}
                cellStyle={styles.pinCell}
                value={pin}
-               onTextChange={(pin) => setPin(pin)}
+               onTextChange={(value) => setPin(value)}
             // codeLength={6}
             />
             <Pressable style={styles.buttonLogin} onPress={() => navigation.navigate('CreatePinSuccess')}>
