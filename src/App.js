@@ -15,6 +15,7 @@ import ResetPassword from './pages/ResetPassword';
 import Home from './pages/Home';
 import History from './pages/History';
 import FindReceiver from './pages/FindReceiver';
+import AmountInput from './pages/AmountInput';
 
 const Stack = createStackNavigator();
 
@@ -43,6 +44,17 @@ const App = () => {
           },
           headerTintColor: color.dark,
           title: 'Find Receiver',
+        }} />
+        <Stack.Screen name="AmountInput" component={AmountInput} options={{
+          headerStyle: {
+            backgroundColor: color.primary,
+            elevation: 0,
+            // borderBottomLeftRadius: 20,
+            // borderBottomRightRadius: 20,
+            height: 80,
+          },
+          headerTintColor: color.white,
+          title: 'Transfer',
         }} />
         <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
         <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />

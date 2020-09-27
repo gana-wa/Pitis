@@ -62,8 +62,8 @@ const DATA = [
    },
 ];
 
-const Item = ({ data }) => (
-   <View style={styles.containerTransaction}>
+const Item = ({ data, navigation }) => (
+   <Pressable style={styles.containerTransaction} onPress={() => navigation.navigate('AmountInput')}>
       <View style={styles.profileContainer}>
          <Image source={{ uri: data.image }} style={styles.profileImg} />
          <View style={styles.textHelloContainer}>
@@ -71,74 +71,41 @@ const Item = ({ data }) => (
             <Text style={styles.textTransaction}>{data.category}</Text>
          </View>
       </View>
-   </View>
+   </Pressable>
 );
 
-const FindReceiver = () => {
+const FindReceiver = ({ navigation }) => {
    const [search, setSearch] = useState('');
 
    return (
       <SafeAreaView style={styles.container}>
-         <StatusBar barStyle="default" backgroundColor={color.primary} />
+         <StatusBar barStyle="dark-content" backgroundColor={color.backgroud} />
          <View>
-            <SearchBar
-               platform="android"
-               placeholder="Search receiver here"
-               value={search}
-               onChangeText={(text) => setSearch(text)}
-               lightTheme={true}
-               containerStyle={{
-                  backgroundColor: color.backgroud,
-                  // marginTop: 10,
-                  paddingHorizontal: '4%',
-               }}
-               inputContainerStyle={{ backgroundColor: 'rgba(58, 61, 66, 0.1)', borderRadius: 12, paddingLeft: 10 }}
-               inputStyle={{ fontSize: 16, fontWeight: '400' }}
-               placeholderTextColor="rgba(58, 61, 66, 0.4)"
-            />
             <SectionList
                sections={DATA}
                keyExtractor={(item, index) => item + index}
-               renderItem={({ item }) => <Item data={item} />}
+               ListHeaderComponent={() => (
+                  <SearchBar
+                     platform="android"
+                     placeholder="Search receiver here"
+                     value={search}
+                     onChangeText={(text) => setSearch(text)}
+                     lightTheme={true}
+                     containerStyle={{
+                        backgroundColor: color.backgroud,
+                        // marginTop: 10,
+                        paddingHorizontal: '4%',
+                     }}
+                     inputContainerStyle={{ backgroundColor: 'rgba(58, 61, 66, 0.1)', borderRadius: 12, paddingLeft: 10 }}
+                     inputStyle={{ fontSize: 16, fontWeight: '400' }}
+                     placeholderTextColor="rgba(58, 61, 66, 0.4)"
+                  />
+               )}
+               renderItem={({ item }) => <Item data={item} navigation={navigation} />}
                renderSectionHeader={({ section: { date } }) => (
                   <View style={styles.section}>
                      <Text style={styles.sectionText}>{date}</Text>
                      <Text style={styles.sectionTextSubtitle}>17 Contact Founds</Text>
-                  </View>
-               )}
-               ListFooterComponent={() => (
-                  <View style={styles.buttonFilterContainer}>
-                     <Button
-                        icon={
-                           <Icon
-                              name="arrow-up"
-                              size={20}
-                              color={color.error}
-                           />
-                        }
-                        titleStyle={{ color: color.error }}
-                        buttonStyle={styles.buttonFillter}
-                        containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
-                     />
-                     <Button
-                        // title="Transfer"
-                        icon={
-                           <Icon
-                              name="arrow-down"
-                              size={20}
-                              color={color.success}
-                           />
-                        }
-                        titleStyle={{ color: color.success }}
-                        buttonStyle={styles.buttonFillter}
-                        containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
-                     />
-                     <Button
-                        title="Filter by Date"
-                        titleStyle={{ color: color.primary }}
-                        buttonStyle={styles.buttonFillter}
-                        containerStyle={{ elevation: 2, flex: 6 }}
-                     />
                   </View>
                )}
             />
