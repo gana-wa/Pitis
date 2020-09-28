@@ -8,6 +8,13 @@ export const register = (data) => {
    };
 };
 
+export const updatePin = (id, data) => {
+   return {
+      type: actions.updatePin,
+      payload: api.updatePin(id, data),
+   };
+};
+
 export const login = (data) => {
    return {
       type: actions.loggedIn,

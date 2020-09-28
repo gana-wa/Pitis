@@ -98,6 +98,14 @@ const styles = StyleSheet.create({
       height: 58,
       width: 47,
    },
+   pinCellEmpty: {
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: color.disabled,
+      backgroundColor: color.white,
+      height: 58,
+      width: 47,
+   },
 });
 
 export default styles;

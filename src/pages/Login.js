@@ -10,9 +10,7 @@ import styles from '../styles/Login';
 import * as color from '../styles/colorStyles';
 
 const Login = ({ navigation }) => {
-   const [message, setMessage] = useState('');
    const [showPassword, setShowPassword] = useState(true);
-   const [logIn, setLogIn] = useState(false);
    const dispatch = useDispatch();
 
    const { msg, isLoggedIn } = useSelector(
@@ -23,13 +21,12 @@ const Login = ({ navigation }) => {
       if (isLoggedIn) {
          return navigation.navigate('Home');
       }
-      if (msg) {
-         setMessage(msg);
+      if (msg !== '...Loading') {
          ToastAndroid.show(msg, ToastAndroid.SHORT);
       }
    }, [isLoggedIn, navigation, msg]);
 
-   const hanleShowPassword = () => {
+   const handleShowPassword = () => {
       setShowPassword(!showPassword);
    };
 
@@ -90,7 +87,7 @@ const Login = ({ navigation }) => {
                         }
                         rightIcon={
                            <Icon
-                              onPress={hanleShowPassword}
+                              onPress={handleShowPassword}
                               name={showPassword ? "eye-off" : "eye"}
                               size={18}
                               color={color.input}
@@ -123,9 +120,6 @@ const Login = ({ navigation }) => {
                      <Text style={styles.buttonLoginText}>Login</Text>
                   </Pressable>
                )}
-            {/* <Pressable style={styles.buttonLogin} onPress={handleSubmit(onSubmit)}>
-               <Text style={styles.buttonLoginText}>Login</Text>
-            </Pressable> */}
             <View style={styles.textSignUpContainer}>
                <Text style={styles.textSignUp}>Don’t have an account? Let’s </Text>
                <Pressable onPress={() => navigation.navigate('Register')}><Text style={styles.textSignUpLink}>Sign Up</Text></Pressable>

@@ -22,7 +22,7 @@ const CreatePinSuccess = ({ navigation }) => {
             </View>
             <Text style={styles.loginText}>PIN Successfully Created</Text>
             <Text style={styles.loginInfoText}>Your PIN was successfully created and you can now access all the features in Zwallet. Login to your new account and start exploring!</Text>
-            <Pressable style={styles.buttonLogin}>
+            <Pressable style={styles.buttonLogin} onPress={() => navigation.navigate('Login')}>
                <Text style={styles.buttonLoginText}>Login Now</Text>
             </Pressable>
          </View>

@@ -9,6 +9,10 @@ export const register = (data) => {
    return Axios.post(`${API_URL}/auth/register`, data);
 };
 
+export const updatePin = (id, data) => {
+   return Axios.patch(`${API_URL}/auth/pin/${id}`, data);
+};
+
 export const editUser = (id, data) => {
    return Axios.patch(`${API_URL}/user/${id}`, data);
 };
