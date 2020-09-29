@@ -9,6 +9,7 @@ const initialState = {
    register_id: '',
    user: {
       user_id: '',
+      username: '',
       balance: '',
       first_name: '',
       last_name: '',
@@ -45,6 +46,7 @@ const authReducer = (state = initialState, action) => {
                msg: action.payload.data.data.msg,
                user: {
                   ...state.user,
+                  username: action.payload.data.data.username,
                   user_id: action.payload.data.data.user_id,
                   balance: action.payload.data.data.balance,
                   first_name: action.payload.data.data.first_name,

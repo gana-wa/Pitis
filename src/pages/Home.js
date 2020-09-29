@@ -2,21 +2,35 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Button } from 'react-native-elements';
+import { useDispatch, useSelector } from 'react-redux';
+import { API_URL } from '../utils/environment';
 
 import * as color from '../styles/colorStyles';
 
 import profileImg from '../assets/img/profile.jpg';
+import defaultProfile from '../assets/img/default_profile.png';
 
 const Home = ({ navigation }) => {
+   const { username, first_name, last_name, phone, photo, balance } = useSelector(
+      (state) => state.auth.user,
+   );
+
+   const profilImg = `${API_URL}${photo}`;
+   // console.log(profilImg);
+
    return (
       <View style={styles.container}>
          <StatusBar barStyle="dark-content" backgroundColor={color.backgroud} />
          <View style={styles.containerHeader}>
             <View style={styles.profileContainer}>
-               <Image source={profileImg} style={styles.profileImg} />
+               <Image source={photo === null ? defaultProfile : ({ uri: profilImg })} style={styles.profileImg} />
                <View style={styles.textHelloContainer}>
                   <Text style={styles.textHello}>Hello,</Text>
-                  <Text style={styles.textName}>John Wick</Text>
+                  {first_name === null || last_name === null ? (
+                     <Text style={styles.textName}>{username}</Text>
+                  ) : (
+                        <Text style={styles.textName}>{`${first_name} ${last_name}`}</Text>
+                     )}
                </View>
             </View>
             <Icon
@@ -27,8 +41,8 @@ const Home = ({ navigation }) => {
          </View>
          <View style={styles.containerBalance}>
             <Text style={styles.textBalanceLabel}>Balance</Text>
-            <Text style={styles.textBalanceNumber}>Rp120.000</Text>
-            <Text style={styles.textPhoneNumber}>+62 813-9387-7946</Text>
+            <Text style={styles.textBalanceNumber}>{`Rp${(balance).toLocaleString()}`}</Text>
+            <Text style={styles.textPhoneNumber}>{phone === null ? 'Phone not set yet' : phone}</Text>
          </View>
          <View style={styles.buttonTransferContainer}>
             <Button
