@@ -22,9 +22,6 @@ const Item = ({ data, navigation }) => (
 
 const FindReceiver = ({ navigation }) => {
    const dispatch = useDispatch();
-   useEffect(() => {
-      dispatch(showContact(curentUser.user_id));
-   }, [dispatch]);
 
    const contact = useSelector(
       (state) => state.user.contact,
@@ -33,6 +30,10 @@ const FindReceiver = ({ navigation }) => {
    const curentUser = useSelector(
       (state) => state.auth.user,
    );
+
+   useEffect(() => {
+      dispatch(showContact(curentUser.user_id));
+   }, [dispatch]);
 
    const DATA = [
       {

@@ -26,8 +26,8 @@ const Home = ({ navigation }) => {
                <Image source={photo === null ? defaultProfile : ({ uri: profilImg })} style={styles.profileImg} />
                <View style={styles.textHelloContainer}>
                   <Text style={styles.textHello}>Hello,</Text>
-                  {first_name === null || last_name === null ? (
-                     <Text style={styles.textName}>{username}</Text>
+                  {last_name === null ? (
+                     <Text style={styles.textName}>{first_name}</Text>
                   ) : (
                         <Text style={styles.textName}>{`${first_name} ${last_name}`}</Text>
                      )}

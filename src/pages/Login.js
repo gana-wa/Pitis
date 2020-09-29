@@ -19,7 +19,10 @@ const Login = ({ navigation }) => {
 
    useEffect(() => {
       if (isLoggedIn) {
-         return navigation.navigate('Home');
+         return navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+         });
       }
       if (msg !== '...Loading') {
          ToastAndroid.show(msg, ToastAndroid.SHORT);

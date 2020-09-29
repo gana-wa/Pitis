@@ -76,6 +76,11 @@ const App = () => {
             headerTintColor: headerStyle.headerTintColorWhite,
             title: 'Enter Your PIN',
           }} />
+          <Stack.Screen name="TransferDetail" component={TransferDetail} options={{
+            headerStyle: headerStyle.headerStyleBlue,
+            headerTintColor: headerStyle.headerTintColorBlue,
+            title: 'Transfer Details',
+          }} />
           <Stack.Screen name="CreatePin" component={CreatePin} options={{ headerShown: false }} />
           <Stack.Screen name="CreatePinSuccess" component={CreatePinSuccess} options={{ headerShown: false }} />
           <Stack.Screen name="ResetPassEmail" component={ResetPassEmail} options={{ headerShown: false }} />
