@@ -11,19 +11,21 @@ import profileImg from '../assets/img/profile.jpg';
 import defaultProfile from '../assets/img/default_profile.png';
 
 const Home = ({ navigation }) => {
+
    const { username, first_name, last_name, phone, photo, balance } = useSelector(
       (state) => state.auth.user,
    );
 
    const profilImg = `${API_URL}${photo}`;
-   // console.log(profilImg);
 
    return (
       <View style={styles.container}>
          <StatusBar barStyle="dark-content" backgroundColor={color.backgroud} />
          <View style={styles.containerHeader}>
             <View style={styles.profileContainer}>
-               <Image source={photo === null ? defaultProfile : ({ uri: profilImg })} style={styles.profileImg} />
+               <Pressable onPress={() => navigation.navigate('Profile')}>
+                  <Image source={photo === null ? defaultProfile : ({ uri: profilImg })} style={styles.profileImg} />
+               </Pressable>
                <View style={styles.textHelloContainer}>
                   <Text style={styles.textHello}>Hello,</Text>
                   {last_name === null ? (

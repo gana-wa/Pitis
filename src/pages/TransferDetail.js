@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Image, ScrollView } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Image, ScrollView, StatusBar } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -16,6 +16,7 @@ const TransferDetail = ({ navigation }) => {
 
    return (
       <SafeAreaView style={styles.container}>
+         <StatusBar barStyle="default" backgroundColor={color.primary} />
          <ScrollView>
             <View style={styles.containerHeader}>
                {ceklist ? (

@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, StatusBar, TextInput } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
+import { useSelector } from 'react-redux';
 
 import * as color from '../styles/colorStyles';
 
@@ -12,6 +13,9 @@ const data = {
 };
 
 const AmountInput = ({ navigation }) => {
+
+   const stateUser = useSelector(state => state.auth.user);
+
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="default" backgroundColor={color.primary} />
@@ -34,7 +38,7 @@ const AmountInput = ({ navigation }) => {
                   keyboardType="numeric"
                   maxLength={10}
                />
-               <Text style={styles.textBalance}>Rp120.000 Available</Text>
+               <Text style={styles.textBalance}>{`Rp${(stateUser.balance).toLocaleString()} Available`}</Text>
                <Input
                   leftIcon={
                      <Icon
