@@ -22,6 +22,7 @@ import AmountInput from './pages/AmountInput';
 import PinConfirmation from './pages/PinConfirmation';
 import TransferDetail from './pages/TransferDetail';
 import Profile from './pages/Profile';
+import PersonalInfo from './pages/PersonalInfo';
 
 const { persistor, store } = configureStore();
 
@@ -87,6 +88,11 @@ const App = () => {
               headerStyle: headerStyle.headerStyleWhite,
               headerTintColor: headerStyle.headerTintColorWhite,
               title: '',
+            }} />
+            <Stack.Screen name="PersonalInfo" component={PersonalInfo} options={{
+              headerStyle: headerStyle.headerStyleWhite,
+              headerTintColor: headerStyle.headerTintColorWhite,
+              title: 'Personal Information',
             }} />
             <Stack.Screen name="CreatePin" component={CreatePin} options={{ headerShown: false }} />
             <Stack.Screen name="CreatePinSuccess" component={CreatePinSuccess} options={{ headerShown: false }} />

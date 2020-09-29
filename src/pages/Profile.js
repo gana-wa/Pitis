@@ -7,15 +7,19 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import * as color from '../styles/colorStyles';
 
-import defaultProfile from '../assets/img/default_profile.png';
+// import defaultProfile from '../assets/img/default_profile.png';
 
-const Profile = () => {
-   const { username, first_name, last_name, phone, photo, balance } = useSelector(
+const Profile = ({ navigation }) => {
+   const { username, first_name, last_name, phone, photo } = useSelector(
       (state) => state.auth.user,
    );
 
    const [isEnabled, setIsEnabled] = useState(false);
    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+
+   const handleNavigation = (to) => {
+      navigation.navigate(to);
+   };
 
    const profilImg = `${API_URL}${photo}`;
    return (
@@ -55,7 +59,7 @@ const Profile = () => {
             }
          </View>
          <View style={styles.containerAllButton}>
-            <TouchableOpacity style={styles.buttonItem}>
+            <TouchableOpacity style={styles.buttonItem} onPress={() => handleNavigation('PersonalInfo')}>
                <>
                   <Text style={styles.textButton}>Personal Information</Text>
                   <Icon
