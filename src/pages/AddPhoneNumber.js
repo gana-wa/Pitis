@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Image, ScrollView, StatusBar, Pressable } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
@@ -7,9 +7,6 @@ import Icon from 'react-native-vector-icons/Feather';
 import * as color from '../styles/colorStyles';
 
 const AddPhoneNumber = ({ navigation }) => {
-   const { first_name, last_name, phone } = useSelector(
-      (state) => state.auth.user,
-   );
 
    return (
       <SafeAreaView style={styles.container}>

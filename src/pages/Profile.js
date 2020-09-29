@@ -69,7 +69,7 @@ const Profile = ({ navigation }) => {
                   />
                </>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonItem}>
+            <TouchableOpacity style={styles.buttonItem} onPress={() => handleNavigation('ChangePassword')}>
                <>
                   <Text style={styles.textButton}>Change Password</Text>
                   <Icon

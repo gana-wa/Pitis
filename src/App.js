@@ -24,6 +24,7 @@ import TransferDetail from './pages/TransferDetail';
 import Profile from './pages/Profile';
 import PersonalInfo from './pages/PersonalInfo';
 import AddPhoneNumber from './pages/AddPhoneNumber';
+import ChangePassword from './pages/ChangePassword';
 
 const { persistor, store } = configureStore();
 
@@ -99,6 +100,11 @@ const App = () => {
               headerStyle: headerStyle.headerStyleWhite,
               headerTintColor: headerStyle.headerTintColorWhite,
               title: 'Add Phone Number',
+            }} />
+            <Stack.Screen name="ChangePassword" component={ChangePassword} options={{
+              headerStyle: headerStyle.headerStyleWhite,
+              headerTintColor: headerStyle.headerTintColorWhite,
+              title: 'Change Password',
             }} />
             <Stack.Screen name="CreatePin" component={CreatePin} options={{ headerShown: false }} />
             <Stack.Screen name="CreatePinSuccess" component={CreatePinSuccess} options={{ headerShown: false }} />
