@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import * as color from '../styles/colorStyles';
 
-const PersonalInfo = () => {
+const PersonalInfo = ({ navigation }) => {
    const { first_name, last_name, phone } = useSelector(
       (state) => state.auth.user,
    );
@@ -47,7 +47,7 @@ const PersonalInfo = () => {
             <View style={styles.textContainer}>
                <Text style={styles.textTitle}>Phone Number</Text>
                {phone === null ? (
-                  <Pressable>
+                  <Pressable onPress={() => navigation.navigate('AddPhoneNumber')}>
                      <Text style={styles.textItemAddPhone}>Add phone number</Text>
                   </Pressable>
                ) : (
