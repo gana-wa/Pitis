@@ -2,12 +2,18 @@ import React, { useState } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
 import { Button } from 'react-native-elements';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
+import { useSelector, useDispatch } from 'react-redux';
+import { transaction } from '../redux/actions/transaction';
 
 import * as color from '../styles/colorStyles';
 
 const PinConfirmation = ({ navigation }) => {
    const [pin, setPin] = useState('');
    const [pinValid, setPinValid] = useState(false);
+
+   const dispatch = useDispatch();
+   const transactionState = useSelector(state => state.transaction.transaction);
+
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="dark-content" backgroundColor={color.backgroud} />
@@ -32,7 +38,11 @@ const PinConfirmation = ({ navigation }) => {
                   title="Transfer Now"
                   buttonStyle={styles.buttonSubmit}
                   titleStyle={styles.buttonSubmitText}
-                  onPress={() => navigation.navigate('TransferDetail')}
+                  onPress={() => {
+                     navigation.navigate('TransferDetail');
+                     dispatch(transaction(transactionState));
+                     // console.log(transaction);
+                  }}
                />
             ) : (
                   <View style={styles.buttonSubmitDisabled}>

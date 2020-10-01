@@ -5,20 +5,41 @@ import { Button, SearchBar } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/environment';
 import { showContact } from '../redux/actions/user';
+import { addReceiver } from '../redux/actions/transaction';
+
+import defaultProfile from '../assets/img/default_profile.png';
 
 import * as color from '../styles/colorStyles';
 
-const Item = ({ data, navigation }) => (
-   <Pressable style={styles.containerTransaction} onPress={() => navigation.navigate('AmountInput')}>
-      <View style={styles.profileContainer}>
-         <Image source={{ uri: `${API_URL}${data.photo}` }} style={styles.profileImg} />
-         <View style={styles.textHelloContainer}>
-            <Text style={styles.textNameTransaction}>{`${data.first_name} ${data.last_name}`}</Text>
-            <Text style={styles.textTransaction}>{data.phone}</Text>
+const Item = ({ sender, dispatch, data, navigation }) => {
+   const receiver = {
+      sender_id: sender,
+      receiver_id: data.user_id,
+      first_name: data.first_name,
+      last_name: data.last_name,
+      photo: data.photo,
+      phone: data.phone,
+   };
+
+   return (
+      <Pressable style={styles.containerTransaction} onPress={() => {
+         navigation.navigate('AmountInput');
+         dispatch(addReceiver(receiver));
+      }}>
+         <View style={styles.profileContainer}>
+            {data.photo === null ? (
+               <Image source={defaultProfile} style={styles.profileImg} />
+            ) : (
+                  <Image source={{ uri: `${API_URL}${data.photo}` }} style={styles.profileImg} />
+               )}
+            <View style={styles.textHelloContainer}>
+               <Text style={styles.textNameTransaction}>{`${data.first_name} ${data.last_name}`}</Text>
+               <Text style={styles.textTransaction}>{data.phone}</Text>
+            </View>
          </View>
-      </View>
-   </Pressable>
-);
+      </Pressable>
+   )
+};
 
 const FindReceiver = ({ navigation }) => {
    const dispatch = useDispatch();
@@ -33,7 +54,7 @@ const FindReceiver = ({ navigation }) => {
 
    useEffect(() => {
       dispatch(showContact(curentUser.user_id));
-   }, [dispatch]);
+   }, []);
 
    const DATA = [
       {
@@ -50,7 +71,7 @@ const FindReceiver = ({ navigation }) => {
          <View>
             <SectionList
                sections={DATA}
-               keyExtractor={(item, index) => item + index}
+               keyExtractor={(item) => item.user_id}
                ListHeaderComponent={() => (
                   <SearchBar
                      platform="android"
@@ -68,7 +89,7 @@ const FindReceiver = ({ navigation }) => {
                      placeholderTextColor="rgba(58, 61, 66, 0.4)"
                   />
                )}
-               renderItem={({ item }) => <Item data={item} navigation={navigation} />}
+               renderItem={({ item }) => <Item data={item} sender={curentUser.user_id} dispatch={dispatch} navigation={navigation} />}
                renderSectionHeader={({ section: { date } }) => (
                   <View style={styles.section}>
                      <Text style={styles.sectionText}>{date}</Text>

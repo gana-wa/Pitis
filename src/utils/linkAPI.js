@@ -26,7 +26,7 @@ export const topUp = (data) => {
 };
 
 export const transfer = (data) => {
-   return Axios.post(`${API_URL}/transaction/topup`, data);
+   return Axios.post(`${API_URL}/transaction/transfer`, data);
 };
 
 export const history = (id) => {

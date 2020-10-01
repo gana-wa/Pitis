@@ -2,24 +2,29 @@ import React from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Image, ScrollView, StatusBar } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
+import { useSelector, useDispatch } from 'react-redux';
+import { API_URL } from '../utils/environment';
+import { DateTime } from 'luxon';
+import { clearTransaction } from '../redux/actions/transaction';
 
 import * as color from '../styles/colorStyles';
 
-const data = {
-   name: 'Arya Stark',
-   phone: '+62 813-8492-9994',
-   image: 'https://vignette.wikia.nocookie.net/gameofthrones/images/b/be/AryaShipIronThrone.PNG/revision/latest/top-crop/width/360/height/360?cb=20190520174300',
-};
+import defaultProfile from '../assets/img/default_profile.png';
+
+const profilImg = (from) => `${API_URL}${(from)}`;
 
 const TransferDetail = ({ navigation }) => {
-   const ceklist = false;
+
+   const dispatch = useDispatch();
+   const stateTransaction = useSelector(state => state.transaction);
+   const currentUser = useSelector(state => state.auth.user);
 
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="default" backgroundColor={color.primary} />
          <ScrollView>
             <View style={styles.containerHeader}>
-               {ceklist ? (
+               {stateTransaction.isSuccess ? (
                   <>
                      <View style={styles.iconSuccessContainer}>
                         <Icon
@@ -44,13 +49,12 @@ const TransferDetail = ({ navigation }) => {
                      </>
                   )}
             </View>
-
             <View>
                <View style={styles.containerTwoItems}>
                   <View style={styles.itemSmallContainer}>
                      <View style={styles.textContainer}>
                         <Text style={styles.textTitle}>Amount</Text>
-                        <Text style={styles.textItem}>Rp100.000</Text>
+                        <Text style={styles.textItem}>{`Rp${Number(stateTransaction.transaction.amount).toLocaleString()}`}</Text>
                      </View>
                   </View>
                   <View style={styles.itemSmallContainer}>
@@ -64,20 +68,20 @@ const TransferDetail = ({ navigation }) => {
                   <View style={styles.itemSmallContainer}>
                      <View style={styles.textContainer}>
                         <Text style={styles.textTitle}>Date</Text>
-                        <Text style={styles.textItem}>May 11, 2020</Text>
+                        <Text style={styles.textItem}>{DateTime.local().setLocale('en').toLocaleString(DateTime.DATE_MED)}</Text>
                      </View>
                   </View>
                   <View style={styles.itemSmallContainer}>
                      <View style={styles.textContainer}>
                         <Text style={styles.textTitle}>Time</Text>
-                        <Text style={styles.textItem}>12.20</Text>
+                        <Text style={styles.textItem}>{DateTime.local().setLocale('id').toLocaleString(DateTime.TIME_SIMPLE)}</Text>
                      </View>
                   </View>
                </View>
                <View style={styles.profileContainer}>
                   <View style={styles.textContainer}>
                      <Text style={styles.textTitle}>Notes</Text>
-                     <Text style={styles.textItem}>For buying some socks</Text>
+                     <Text style={styles.textItem}>{stateTransaction.transaction.notes === '' ? '(No notes)' : stateTransaction.transaction.notes}</Text>
                   </View>
                </View>
             </View>
@@ -85,30 +89,33 @@ const TransferDetail = ({ navigation }) => {
                <Text style={styles.sectionText}>From</Text>
                <View style={styles.profileContainer}>
                   <View style={styles.profileFlex}>
-                     <Image source={{ uri: data.image }} style={styles.profileImg} />
+                     <Image source={currentUser.photo === null ? defaultProfile : ({ uri: profilImg(currentUser.photo) })} style={styles.profileImg} />
                      <View style={styles.textProfileContainer}>
-                        <Text style={styles.textName}>{data.name}</Text>
-                        <Text style={styles.textPhone}>{data.phone}</Text>
+                        <Text style={styles.textName}>{currentUser.last_name === null ? currentUser.first_name : `${currentUser.first_name} ${currentUser.last_name}`}</Text>
+                        <Text style={styles.textPhone}>{currentUser.phone}</Text>
                      </View>
                   </View>
                </View>
                <Text style={styles.sectionText}>To</Text>
                <View style={styles.profileContainer}>
                   <View style={styles.profileFlex}>
-                     <Image source={{ uri: data.image }} style={styles.profileImg} />
+                     <Image source={stateTransaction.receiver.photo === null ? defaultProfile : ({ uri: profilImg(stateTransaction.receiver.photo) })} style={styles.profileImg} />
                      <View style={styles.textProfileContainer}>
-                        <Text style={styles.textName}>{data.name}</Text>
-                        <Text style={styles.textPhone}>{data.phone}</Text>
+                        <Text style={styles.textName}>{stateTransaction.receiver.last_name === null ? stateTransaction.receiver.first_name : `${stateTransaction.receiver.first_name} ${stateTransaction.receiver.last_name}`}</Text>
+                        <Text style={styles.textPhone}>{stateTransaction.receiver.phone}</Text>
                      </View>
                   </View>
                </View>
             </View>
-            {ceklist ? (
+            {stateTransaction.isSuccess ? (
                <Button
                   title="Back to Home"
                   buttonStyle={styles.buttonSubmit}
                   titleStyle={styles.buttonSubmitText}
-                  onPress={() => navigation.navigate('Home')}
+                  onPress={() => {
+                     navigation.navigate('Home');
+                     dispatch(clearTransaction());
+                  }}
                />
             ) : (
                   <Button

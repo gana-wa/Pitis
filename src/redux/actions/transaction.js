@@ -21,3 +21,23 @@ export const history = (id) => {
       payload: api.history(id),
    };
 };
+
+export const addReceiver = (data) => {
+   return {
+      type: actions.addReceiver,
+      payload: data,
+   };
+};
+
+export const inputAmount = (data) => {
+   return {
+      type: actions.inputAmount,
+      payload: data,
+   };
+};
+
+export const clearTransaction = () => {
+   return {
+      type: actions.clearTransaction,
+   };
+};

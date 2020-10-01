@@ -2,19 +2,28 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, SafeAreaView, StatusBar, TextInput } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { API_URL } from '../utils/environment';
+import { useForm, Controller } from 'react-hook-form';
+import { inputAmount } from '../redux/actions/transaction';
+
+import defaultProfile from '../assets/img/default_profile.png';
 
 import * as color from '../styles/colorStyles';
 
-const data = {
-   name: 'Arya Stark',
-   phone: '+62 813-8492-9994',
-   image: 'https://vignette.wikia.nocookie.net/gameofthrones/images/b/be/AryaShipIronThrone.PNG/revision/latest/top-crop/width/360/height/360?cb=20190520174300',
-};
-
 const AmountInput = ({ navigation }) => {
-
+   const dispatch = useDispatch();
    const stateUser = useSelector(state => state.auth.user);
+   const { receiver_id, first_name, last_name, photo, phone } = useSelector(state => state.transaction.receiver);
+
+   const profilImg = `${API_URL}${photo}`;
+
+   const { control, handleSubmit, errors } = useForm();
+
+   const onSubmit = (data) => {
+      dispatch(inputAmount(data));
+      navigation.navigate('PinConfirmation');
+   };
 
    return (
       <SafeAreaView style={styles.container}>
@@ -22,35 +31,61 @@ const AmountInput = ({ navigation }) => {
          <View style={styles.containerHeader}>
             <View style={styles.containerProfile}>
                <View style={styles.profileFlex}>
-                  <Image source={{ uri: data.image }} style={styles.profileImg} />
+                  {photo === null ? (
+                     <Image source={defaultProfile} style={styles.profileImg} />
+                  ) : (
+                        <Image source={{ uri: profilImg }} style={styles.profileImg} />
+                     )}
                   <View style={styles.textProfileContainer}>
-                     <Text style={styles.textName}>{data.name}</Text>
-                     <Text style={styles.textPhone}>{data.phone}</Text>
+                     <Text style={styles.textName}>{`${first_name} ${last_name === null ? '' : last_name}`}</Text>
+                     <Text style={styles.textPhone}>{phone}</Text>
                   </View>
                </View>
             </View>
          </View>
          <View style={styles.containerMainContent}>
             <View>
-               <TextInput
-                  placeholder="0.00"
-                  style={styles.inpuBalance}
-                  keyboardType="numeric"
-                  maxLength={10}
+               <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                     <TextInput
+                        placeholder="0.00"
+                        style={styles.inpuBalance}
+                        keyboardType="numeric"
+                        maxLength={10}
+                        onBlur={onBlur}
+                        onChangeText={text => onChange(text)}
+                        value={value}
+                     />
+                  )}
+                  name="amount"
+                  rules={{ required: true }}
+                  defaultValue=""
                />
                <Text style={styles.textBalance}>{`Rp${(stateUser.balance).toLocaleString()} Available`}</Text>
-               <Input
-                  leftIcon={
-                     <Icon
-                        name="edit-2"
-                        size={20}
-                        color={color.input}
+               <Controller
+                  control={control}
+                  render={({ onChange, onBlur, value }) => (
+                     <Input
+                        leftIcon={
+                           <Icon
+                              name="edit-2"
+                              size={20}
+                              color={color.input}
+                           />
+                        }
+                        placeholder="Add some notes"
+                        placeholderTextColor={color.input}
+                        style={styles.notes}
+                        containerStyle={styles.notesContainer}
+                        onBlur={onBlur}
+                        onChangeText={text => onChange(text)}
+                        value={value}
                      />
-                  }
-                  placeholder="Add some notes"
-                  placeholderTextColor={color.input}
-                  style={styles.notes}
-                  containerStyle={styles.notesContainer}
+                  )}
+                  name="notes"
+                  rules={{ required: false }}
+                  defaultValue=""
                />
             </View>
             <Button
@@ -58,7 +93,7 @@ const AmountInput = ({ navigation }) => {
                buttonStyle={styles.buttonSubmit}
                titleStyle={styles.buttonSubmitText}
                // onPress={()=>navigation.navigate('TransferConfirmation')}
-               onPress={() => navigation.navigate('PinConfirmation')}
+               onPress={handleSubmit(onSubmit)}
             />
          </View>
       </SafeAreaView>
