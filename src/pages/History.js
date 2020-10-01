@@ -1,77 +1,92 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, Pressable, SafeAreaView, SectionList } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Button } from 'react-native-elements';
+import { API_URL } from '../utils/environment';
+import { useDispatch, useSelector } from 'react-redux';
+import { history } from '../redux/actions/transaction';
 
 import * as color from '../styles/colorStyles';
 
-const DATA = [
-   {
-      date: 'This Week',
-      data: [
-         {
-            name: 'Arya Stark',
-            category: 'Transfer',
-            type: 'income',
-            nominal: 'Rp50.000',
-            image: 'https://vignette.wikia.nocookie.net/gameofthrones/images/b/be/AryaShipIronThrone.PNG/revision/latest/top-crop/width/360/height/360?cb=20190520174300',
-         },
-         {
-            name: 'Spotify',
-            category: 'Subscription',
-            type: 'outcome',
-            nominal: 'Rp49.000',
-            image: 'https://s3-alpha-sig.figma.com/img/570b/b727/0ef239fe7616f3da10bac5dc7675c510?Expires=1601856000&Signature=AvPO60Rw-R3potidy7r4KSm5EkFaVBbo6N5FYi~6Ehfi8irVgan~Wsu4Fck~~2hp2XP~cZnJtSYIhm-EtrENoNySl2ahPMNrS74A05TMfZn4uy3jXCuz2c2WZ2beBF5GjqFDHrRGdr4HuV4BX6f92uWeEI82tK3zGcDSn3N~9bNi7farsJ8TfzcAzYSjWcY6FrArLKQYtQRbg6pmujTl61nVmKzDb06K~q8wNHTqJ59s81h-bTRfNyN2uoSmjdnJMOHemTZtHpBEB1vfMEtF6lPDfiAB5Jfv1~~1~E-iQ2MmDmOUilksDoD9cocQAblZN8UUPxdvnwIBVBkqg6EaPQ__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-         },
-      ],
-   },
-   {
-      date: 'This Month',
-      data: [
-         {
-            name: 'Jon Snow',
-            category: 'Transfer',
-            type: 'income',
-            nominal: 'Rp50.000',
-            image: 'https://i.insider.com/5cb3c8e96afbee373d4f2b62?width=600&format=jpeg&auto=webp',
-         },
-         {
-            name: 'Netflix',
-            category: 'Subscription',
-            type: 'outcome',
-            nominal: 'Rp149.000',
-            image: 'https://s3-alpha-sig.figma.com/img/6d32/07de/81456a08f7adaf48e4801b0cae72763b?Expires=1601856000&Signature=GhP3uXKBpSMH7NxyTrPhRPdpX7KYfn7KJB7YxpY6~GQrl2vZi91cKTIOSskebnqVTa9TZlk1io9yYjg4Ews50i-lfwhz52Y8VaGAzsNdBjFYiPF1t5QdQE0fChORODKbODDy7X9~QhrEkMRrxWaAFT0B-Y9Lm4he98yT4BJckQyQby~C0eVdKZP0hQUaLFW4GtcBmoK2LbXXQVAZ2VscnpirhGd7onvq-CDdN663FwTSY3~jXO3qOdqwBsTymaKxfp-mv~f9GAVaPJA1bmEEjD8YuVFVro0P9pLY5klA3AlJIqveHb7DY5Z7Phji23yB07i10omyqwe92xEDPQA~4w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-         },
+import defaultProfile from '../assets/img/default_profile.png';
 
-         {
-            name: 'Netflix',
-            category: 'Subscription',
-            type: 'outcome',
-            nominal: 'Rp149.000',
-            image: 'https://s3-alpha-sig.figma.com/img/6d32/07de/81456a08f7adaf48e4801b0cae72763b?Expires=1601856000&Signature=GhP3uXKBpSMH7NxyTrPhRPdpX7KYfn7KJB7YxpY6~GQrl2vZi91cKTIOSskebnqVTa9TZlk1io9yYjg4Ews50i-lfwhz52Y8VaGAzsNdBjFYiPF1t5QdQE0fChORODKbODDy7X9~QhrEkMRrxWaAFT0B-Y9Lm4he98yT4BJckQyQby~C0eVdKZP0hQUaLFW4GtcBmoK2LbXXQVAZ2VscnpirhGd7onvq-CDdN663FwTSY3~jXO3qOdqwBsTymaKxfp-mv~f9GAVaPJA1bmEEjD8YuVFVro0P9pLY5klA3AlJIqveHb7DY5Z7Phji23yB07i10omyqwe92xEDPQA~4w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-         },
-      ],
-   },
-];
+// const DATA = [
+//    {
+//       date: 'This Week',
+//       data: stateHistory
+//    },
+//    {
+//       date: 'This Month',
+//       data: [
+//          {
+//             name: 'Jon Snow',
+//             category: 'Transfer',
+//             type: 'income',
+//             nominal: 'Rp50.000',
+//             image: 'https://i.insider.com/5cb3c8e96afbee373d4f2b62?width=600&format=jpeg&auto=webp',
+//          },
+//          {
+//             name: 'Netflix',
+//             category: 'Subscription',
+//             type: 'outcome',
+//             nominal: 'Rp149.000',
+//             image: 'https://s3-alpha-sig.figma.com/img/6d32/07de/81456a08f7adaf48e4801b0cae72763b?Expires=1601856000&Signature=GhP3uXKBpSMH7NxyTrPhRPdpX7KYfn7KJB7YxpY6~GQrl2vZi91cKTIOSskebnqVTa9TZlk1io9yYjg4Ews50i-lfwhz52Y8VaGAzsNdBjFYiPF1t5QdQE0fChORODKbODDy7X9~QhrEkMRrxWaAFT0B-Y9Lm4he98yT4BJckQyQby~C0eVdKZP0hQUaLFW4GtcBmoK2LbXXQVAZ2VscnpirhGd7onvq-CDdN663FwTSY3~jXO3qOdqwBsTymaKxfp-mv~f9GAVaPJA1bmEEjD8YuVFVro0P9pLY5klA3AlJIqveHb7DY5Z7Phji23yB07i10omyqwe92xEDPQA~4w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
+//          },
 
-const Item = ({ data }) => (
-   <View style={styles.containerTransaction}>
-      <View style={styles.profileContainer}>
-         <Image source={{ uri: data.image }} style={styles.profileImg} />
-         <View style={styles.textHelloContainer}>
-            <Text style={styles.textNameTransaction}>{data.name}</Text>
-            <Text style={styles.textTransaction}>{data.category}</Text>
+//          {
+//             name: 'Netflix',
+//             category: 'Subscription',
+//             type: 'outcome',
+//             nominal: 'Rp149.000',
+//             image: 'https://s3-alpha-sig.figma.com/img/6d32/07de/81456a08f7adaf48e4801b0cae72763b?Expires=1601856000&Signature=GhP3uXKBpSMH7NxyTrPhRPdpX7KYfn7KJB7YxpY6~GQrl2vZi91cKTIOSskebnqVTa9TZlk1io9yYjg4Ews50i-lfwhz52Y8VaGAzsNdBjFYiPF1t5QdQE0fChORODKbODDy7X9~QhrEkMRrxWaAFT0B-Y9Lm4he98yT4BJckQyQby~C0eVdKZP0hQUaLFW4GtcBmoK2LbXXQVAZ2VscnpirhGd7onvq-CDdN663FwTSY3~jXO3qOdqwBsTymaKxfp-mv~f9GAVaPJA1bmEEjD8YuVFVro0P9pLY5klA3AlJIqveHb7DY5Z7Phji23yB07i10omyqwe92xEDPQA~4w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
+//          },
+//       ],
+//    },
+// ];
+
+const Item = ({ data }) => {
+   const profilImg = `${API_URL}${data.photo}`;
+
+   return (
+      <View style={styles.containerTransaction}>
+         <View style={styles.profileContainer}>
+            {data.category === 'Top Up' ? null : (
+               <Image source={data.photo === null ? defaultProfile : ({ uri: profilImg })} style={styles.profileImg} />
+            )}
+            <View style={styles.textHelloContainer}>
+               {data.category === 'Top Up' ? (
+                  <Text style={styles.textNameTransaction}>Top Up Zwallet</Text>
+               ) : (
+                     <Text style={styles.textNameTransaction}>{data.last_name === null ? data.first_name : `${data.first_name} ${data.last_name}`}</Text>
+                  )}
+               <Text style={styles.textTransaction}>{data.category}</Text>
+            </View>
          </View>
+         {data.type === 'in' ? (
+            <Text style={styles.textTransactionNumberIncome}>{`+Rp${(data.amount).toLocaleString('id-ID')}`}</Text>
+         ) : (
+               <Text style={styles.textTransactionNumberOutcome}>{`-Rp${(data.amount).toLocaleString('id-ID')}`}</Text>
+            )}
       </View>
-      {data.type === 'income' ? (
-         <Text style={styles.textTransactionNumberIncome}>{`+${data.nominal}`}</Text>
-      ) : (
-            <Text style={styles.textTransactionNumberOutcome}>{`-${data.nominal}`}</Text>
-         )}
-   </View>
-);
+   )
+};
 
 const History = ({ navigation }) => {
+   const currentUser = useSelector(state => state.auth.user);
+   const dispatch = useDispatch();
+   useEffect(() => {
+      dispatch(history(currentUser.user_id));
+   }, []);
+
+   const stateHistory = useSelector(state => state.transaction.history);
+
+   const DATA = [
+      {
+         date: 'This Week',
+         data: stateHistory,
+      },
+   ];
+
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="default" backgroundColor={color.primary} />

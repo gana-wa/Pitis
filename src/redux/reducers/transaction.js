@@ -1,11 +1,23 @@
 import * as actions from '../actions/actionTypes';
 
 const intialState = {
-   history: '',
+   // history: {
+   //    transaction_id: '',
+   //    user_id: '',
+   //    receiver_id: '',
+   //    first_name: '',
+   //    last_name: '',
+   //    photo: '',
+   //    category: '',
+   //    type: '',
+   //    amount: '',
+   //    date: '',
+   // },
    isPending: false,
    isSuccess: false,
    isRejected: false,
    msg: '',
+   history: [],
    transaction: {
       category: '',
       type: '',
@@ -26,6 +38,38 @@ const intialState = {
 
 const transaction = (state = intialState, action) => {
    switch (action.type) {
+      case actions.historyFetched + actions.pending:
+         return {
+            ...state,
+            isPeding: true,
+            msg: '...Loading',
+         };
+      case actions.historyFetched + actions.rejected:
+         return {
+            ...state,
+            isRejected: true,
+            isPending: false,
+            msg: 'Transfer failed..!',
+         };
+      case actions.historyFetched + actions.fulfilled:
+         if (action.payload.data.isSuccess) {
+            return {
+               ...state,
+               isLoggedIn: true,
+               isSuccess: true,
+               isPending: false,
+               history: action.payload.data.data,
+            };
+         } else {
+            return {
+               ...state,
+               isSuccess: false,
+               isPending: false,
+               isLoggedIn: false,
+               msg: action.payload.data.data.msg,
+            };
+         }
+      // --------------------------------------------------------------------------------
       case actions.insert_transaction + actions.pending:
          return {
             ...state,
