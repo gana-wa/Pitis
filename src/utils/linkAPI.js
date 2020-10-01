@@ -32,3 +32,7 @@ export const transfer = (data) => {
 export const history = (id) => {
    return Axios.get(`${API_URL}/transaction/history/${id}`);
 };
+
+export const fetchBalance = (id) => {
+   return Axios.get(`${API_URL}/user/balance/${id}`);
+};

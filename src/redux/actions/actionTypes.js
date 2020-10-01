@@ -11,6 +11,7 @@ export const loggedOut = 'LOGGED_OUT';
 
 export const editUser = 'EDIT_USER';
 export const contactFetched = 'CONTACT_FETCHED';
+export const fetchBalance = 'FETCH_BALANCE';
 
 export const addReceiver = 'ADD_RECEIVER';
 export const inputAmount = 'INPUT_AMOUNT';

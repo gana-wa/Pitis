@@ -85,7 +85,7 @@ const AmountInput = ({ navigation }) => {
                   )}
                   name="notes"
                   rules={{ required: false }}
-                  defaultValue=""
+                  defaultValue={null}
                />
             </View>
             <Button

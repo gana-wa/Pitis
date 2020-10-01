@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, Image, StatusBar, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/environment';
+import { fetchBalance } from '../redux/actions/user';
 
 import * as color from '../styles/colorStyles';
 
@@ -12,9 +13,15 @@ import defaultProfile from '../assets/img/default_profile.png';
 
 const Home = ({ navigation }) => {
 
-   const { username, first_name, last_name, phone, photo, balance } = useSelector(
+   const { username, first_name, last_name, phone, photo, balance, user_id } = useSelector(
       (state) => state.auth.user,
    );
+
+   const dispatch = useDispatch();
+
+   useEffect(() => {
+      dispatch(fetchBalance(user_id));
+   }, [dispatch, user_id]);
 
    const profilImg = `${API_URL}${photo}`;
 
@@ -43,7 +50,7 @@ const Home = ({ navigation }) => {
          </View>
          <View style={styles.containerBalance}>
             <Text style={styles.textBalanceLabel}>Balance</Text>
-            <Text style={styles.textBalanceNumber}>{`Rp${(balance).toLocaleString()}`}</Text>
+            <Text style={styles.textBalanceNumber}>{`Rp${(balance).toLocaleString('id-ID')}`}</Text>
             <Text style={styles.textPhoneNumber}>{phone === null ? 'Phone not set yet' : phone}</Text>
          </View>
          <View style={styles.buttonTransferContainer}>

@@ -14,3 +14,10 @@ export const showContact = (id) => {
       payload: api.showContact(id),
    };
 };
+
+export const fetchBalance = (id) => {
+   return {
+      type: actions.fetchBalance,
+      payload: api.fetchBalance(id),
+   };
+};

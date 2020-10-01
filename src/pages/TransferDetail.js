@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, SafeAreaView, StyleSheet, Image, ScrollView, StatusBar } from 'react-native';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { API_URL } from '../utils/environment';
 import { DateTime } from 'luxon';
 import { clearTransaction } from '../redux/actions/transaction';
+import { fetchBalance } from '../redux/actions/user';
 
 import * as color from '../styles/colorStyles';
 
@@ -18,6 +19,10 @@ const TransferDetail = ({ navigation }) => {
    const dispatch = useDispatch();
    const stateTransaction = useSelector(state => state.transaction);
    const currentUser = useSelector(state => state.auth.user);
+
+   useEffect(() => {
+      dispatch(fetchBalance(currentUser.user_id));
+   }, [dispatch, currentUser.user_id]);
 
    return (
       <SafeAreaView style={styles.container}>
@@ -60,7 +65,7 @@ const TransferDetail = ({ navigation }) => {
                   <View style={styles.itemSmallContainer}>
                      <View style={styles.textContainer}>
                         <Text style={styles.textTitle}>Balance Left</Text>
-                        <Text style={styles.textItem}>Rp20.000</Text>
+                        <Text style={styles.textItem}>{`Rp${(currentUser.balance).toLocaleString('id-ID')}`}</Text>
                      </View>
                   </View>
                </View>
@@ -81,7 +86,7 @@ const TransferDetail = ({ navigation }) => {
                <View style={styles.profileContainer}>
                   <View style={styles.textContainer}>
                      <Text style={styles.textTitle}>Notes</Text>
-                     <Text style={styles.textItem}>{stateTransaction.transaction.notes === '' ? '(No notes)' : stateTransaction.transaction.notes}</Text>
+                     <Text style={styles.textItem}>{stateTransaction.transaction.notes === null ? '(No notes)' : stateTransaction.transaction.notes}</Text>
                   </View>
                </View>
             </View>

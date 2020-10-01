@@ -131,6 +131,30 @@ const authReducer = (state = initialState, action) => {
                msg: action.payload.data.data.msg,
             };
          }
+      case actions.fetchBalance + actions.pending:
+         return {
+            ...state,
+            isPeding: true,
+            msg: '...Loading',
+         };
+      case actions.fetchBalance + actions.rejected:
+         return {
+            ...state,
+            isRejected: true,
+            isPending: false,
+            msg: 'Fetch Balance failed..!',
+         };
+      case actions.fetchBalance + actions.fulfilled:
+         return {
+            ...state,
+            isSuccess: true,
+            isPending: false,
+            isRejected: false,
+            user: {
+               ...state.user,
+               balance: action.payload.data.data[0].balance,
+            },
+         };
       default:
          return state;
    }
