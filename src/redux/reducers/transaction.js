@@ -25,7 +25,6 @@ const intialState = {
       receiver_id: '',
       amount: '',
       notes: '',
-      date: '',
    },
    receiver: {
       receiver_id: '',
@@ -99,7 +98,6 @@ const transaction = (state = intialState, action) => {
                   receiver_id: action.payload.data.data.receiver_id,
                   amount: action.payload.data.data.amount,
                   notes: action.payload.data.data.notes,
-                  date: action.payload.data.data.date,
                },
             };
          } else {
@@ -153,7 +151,6 @@ const transaction = (state = intialState, action) => {
                receiver_id: '',
                amount: '',
                notes: '',
-               date: '',
             },
             receiver: {
                receiver_id: '',
