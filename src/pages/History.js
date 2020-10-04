@@ -5,44 +5,11 @@ import { Button } from 'react-native-elements';
 import { API_URL } from '../utils/environment';
 import { useDispatch, useSelector } from 'react-redux';
 import { history } from '../redux/actions/transaction';
+import { DateTime } from 'luxon';
 
 import * as color from '../styles/colorStyles';
 
 import defaultProfile from '../assets/img/default_profile.png';
-
-// const DATA = [
-//    {
-//       date: 'This Week',
-//       data: stateHistory
-//    },
-//    {
-//       date: 'This Month',
-//       data: [
-//          {
-//             name: 'Jon Snow',
-//             category: 'Transfer',
-//             type: 'income',
-//             nominal: 'Rp50.000',
-//             image: 'https://i.insider.com/5cb3c8e96afbee373d4f2b62?width=600&format=jpeg&auto=webp',
-//          },
-//          {
-//             name: 'Netflix',
-//             category: 'Subscription',
-//             type: 'outcome',
-//             nominal: 'Rp149.000',
-//             image: 'https://s3-alpha-sig.figma.com/img/6d32/07de/81456a08f7adaf48e4801b0cae72763b?Expires=1601856000&Signature=GhP3uXKBpSMH7NxyTrPhRPdpX7KYfn7KJB7YxpY6~GQrl2vZi91cKTIOSskebnqVTa9TZlk1io9yYjg4Ews50i-lfwhz52Y8VaGAzsNdBjFYiPF1t5QdQE0fChORODKbODDy7X9~QhrEkMRrxWaAFT0B-Y9Lm4he98yT4BJckQyQby~C0eVdKZP0hQUaLFW4GtcBmoK2LbXXQVAZ2VscnpirhGd7onvq-CDdN663FwTSY3~jXO3qOdqwBsTymaKxfp-mv~f9GAVaPJA1bmEEjD8YuVFVro0P9pLY5klA3AlJIqveHb7DY5Z7Phji23yB07i10omyqwe92xEDPQA~4w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-//          },
-
-//          {
-//             name: 'Netflix',
-//             category: 'Subscription',
-//             type: 'outcome',
-//             nominal: 'Rp149.000',
-//             image: 'https://s3-alpha-sig.figma.com/img/6d32/07de/81456a08f7adaf48e4801b0cae72763b?Expires=1601856000&Signature=GhP3uXKBpSMH7NxyTrPhRPdpX7KYfn7KJB7YxpY6~GQrl2vZi91cKTIOSskebnqVTa9TZlk1io9yYjg4Ews50i-lfwhz52Y8VaGAzsNdBjFYiPF1t5QdQE0fChORODKbODDy7X9~QhrEkMRrxWaAFT0B-Y9Lm4he98yT4BJckQyQby~C0eVdKZP0hQUaLFW4GtcBmoK2LbXXQVAZ2VscnpirhGd7onvq-CDdN663FwTSY3~jXO3qOdqwBsTymaKxfp-mv~f9GAVaPJA1bmEEjD8YuVFVro0P9pLY5klA3AlJIqveHb7DY5Z7Phji23yB07i10omyqwe92xEDPQA~4w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA',
-//          },
-//       ],
-//    },
-// ];
 
 const Item = ({ data }) => {
    const profilImg = `${API_URL}${data.photo}`;
@@ -68,7 +35,7 @@ const Item = ({ data }) => {
                <Text style={styles.textTransactionNumberOutcome}>{`-Rp${(data.amount).toLocaleString('id-ID')}`}</Text>
             )}
       </View>
-   )
+   );
 };
 
 const History = ({ navigation }) => {
@@ -80,61 +47,91 @@ const History = ({ navigation }) => {
 
    const stateHistory = useSelector(state => state.transaction.history);
 
-   const DATA = [
+   const startDateWeek = DateTime.local().startOf('week').toISODate();
+   const endDateWeek = DateTime.local().startOf('week').plus({ days: 7 }).toISODate();
+   const getThisMonth = DateTime.local().month;
+
+   const thisWeek = stateHistory.filter((item) => {
+      return (
+         DateTime.fromISO(item.date).toISODate() >= startDateWeek &&
+         DateTime.fromISO(item.date).toISODate() <= endDateWeek
+      );
+   });
+
+   const thisMonth = stateHistory.filter((item) => {
+      return (
+         !thisWeek.includes(item) &&
+         DateTime.fromISO(item.date).month === getThisMonth
+      );
+   });
+
+   const beforeAgain = stateHistory.filter((item) => {
+      return (
+         !thisWeek.includes(item) &&
+         !thisMonth.includes(item)
+      );
+   });
+
+   const historyData = [
       {
          date: 'This Week',
-         data: stateHistory,
+         data: thisWeek,
+      },
+      {
+         date: 'This Month',
+         data: thisMonth,
+      },
+      {
+         date: 'Before Again',
+         data: beforeAgain,
       },
    ];
 
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="default" backgroundColor={color.primary} />
-         <View>
-            <SectionList
-               sections={DATA}
-               keyExtractor={(item, index) => item + index}
-               renderItem={({ item }) => <Item data={item} />}
-               renderSectionHeader={({ section: { date } }) => (
+         <SectionList
+            sections={historyData}
+            keyExtractor={(item, index) => item + index}
+            renderItem={({ item }) => <Item data={item} />}
+            renderSectionHeader={({ section: { date, data } }) => (
+               data.length === 0 ? null :
                   <View style={styles.section}>
                      <Text style={styles.sectionText}>{date}</Text>
                   </View>
-               )}
-               ListFooterComponent={() => (
-                  <View style={styles.buttonFilterContainer}>
-                     <Button
-                        icon={
-                           <Icon
-                              name="arrow-up"
-                              size={20}
-                              color={color.error}
-                           />
-                        }
-                        titleStyle={{ color: color.error }}
-                        buttonStyle={styles.buttonFillter}
-                        containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
-                     />
-                     <Button
-                        // title="Transfer"
-                        icon={
-                           <Icon
-                              name="arrow-down"
-                              size={20}
-                              color={color.success}
-                           />
-                        }
-                        titleStyle={{ color: color.success }}
-                        buttonStyle={styles.buttonFillter}
-                        containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
-                     />
-                     <Button
-                        title="Filter by Date"
-                        titleStyle={{ color: color.primary }}
-                        buttonStyle={styles.buttonFillter}
-                        containerStyle={{ elevation: 2, flex: 6 }}
-                     />
-                  </View>
-               )}
+            )
+            }
+         />
+         <View style={styles.buttonFilterContainer}>
+            <Button
+               icon={
+                  <Icon
+                     name="arrow-up"
+                     size={20}
+                     color={color.error}
+                  />
+               }
+               titleStyle={{ color: color.error }}
+               buttonStyle={styles.buttonFillter}
+               containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
+            />
+            <Button
+               icon={
+                  <Icon
+                     name="arrow-down"
+                     size={20}
+                     color={color.success}
+                  />
+               }
+               titleStyle={{ color: color.success }}
+               buttonStyle={styles.buttonFillter}
+               containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
+            />
+            <Button
+               title="Filter by Date"
+               titleStyle={{ color: color.primary }}
+               buttonStyle={styles.buttonFillter}
+               containerStyle={{ elevation: 2, flex: 6 }}
             />
          </View>
       </SafeAreaView>
@@ -219,7 +216,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       padding: '4%',
       borderRadius: 10,
-      elevation: 1,
+      elevation: 3,
    },
    textNameTransaction: {
       fontWeight: '700',
