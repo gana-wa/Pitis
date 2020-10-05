@@ -155,6 +155,31 @@ const authReducer = (state = initialState, action) => {
                balance: action.payload.data.data[0].balance,
             },
          };
+      case actions.editUser + actions.pending:
+         return {
+            ...state,
+            isPeding: true,
+            msg: '...Loading',
+         };
+      case actions.editUser + actions.rejected:
+         return {
+            ...state,
+            isRejected: true,
+            isPending: false,
+            msg: 'Edit user failed..!',
+         };
+      case actions.editUser + actions.fulfilled:
+         return {
+            ...state,
+            isSuccess: true,
+            isPending: false,
+            isRejected: false,
+            msg: action.payload.data.data.msg,
+            user: {
+               ...state.user,
+               phone: action.payload.data.data.phone,
+            },
+         };
       default:
          return state;
    }

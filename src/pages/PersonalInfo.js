@@ -45,14 +45,25 @@ const PersonalInfo = ({ navigation }) => {
          </View>
          <View style={styles.profileContainer}>
             <View style={styles.textContainer}>
-               <Text style={styles.textTitle}>Phone Number</Text>
-               {phone === null ? (
-                  <Pressable onPress={() => navigation.navigate('AddPhoneNumber')}>
-                     <Text style={styles.textItemAddPhone}>Add phone number</Text>
-                  </Pressable>
-               ) : (
-                     <Text style={styles.textItem}>{phone}</Text>
+               <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                  <View>
+                     <Text style={styles.textTitle}>Phone Number</Text>
+                     {phone === null ? (
+                        <Pressable onPress={() => navigation.navigate('AddPhoneNumber')}>
+                           <Text style={styles.textItemAddPhone}>Add phone number</Text>
+                        </Pressable>
+                     ) : (
+                           <View>
+                              <Text style={styles.textItem}>{phone}</Text>
+                           </View>
+                        )}
+                  </View>
+                  {phone === null ? null : (
+                     <Pressable onPress={() => alert('Coming up next')} style={{ justifyContent: 'center' }}>
+                        <Text style={{ color: color.primary, fontSize: 14, fontWeight: '600' }}>Manage</Text>
+                     </Pressable>
                   )}
+               </View>
             </View>
          </View>
       </SafeAreaView>
@@ -79,6 +90,7 @@ const styles = StyleSheet.create({
    textContainer: {
       justifyContent: 'space-between',
       height: 50,
+      flex: 1,
       // marginLeft: 20,
    },
    textTitle: {

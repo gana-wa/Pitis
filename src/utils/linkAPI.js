@@ -14,7 +14,7 @@ export const updatePin = (id, data) => {
 };
 
 export const editUser = (id, data) => {
-   return Axios.patch(`${API_URL}/user/${id}`, data);
+   return Axios.patch(`${API_URL}/user/edit/${id}`, data);
 };
 
 export const showContact = (id) => {
