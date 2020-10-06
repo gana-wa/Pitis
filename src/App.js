@@ -19,6 +19,7 @@ import Home from './pages/Home';
 import History from './pages/History';
 import FindReceiver from './pages/FindReceiver';
 import AmountInput from './pages/AmountInput';
+import TransferConfirmation from './pages/TransferConfirmation';
 import PinConfirmation from './pages/PinConfirmation';
 import TransferDetail from './pages/TransferDetail';
 import Profile from './pages/Profile';
@@ -75,6 +76,11 @@ const App = () => {
               },
               headerTintColor: color.white,
               title: 'Transfer',
+            }} />
+            <Stack.Screen name="TransferConfirmation" component={TransferConfirmation} options={{
+              headerStyle: headerStyle.headerStyleWhite,
+              headerTintColor: headerStyle.headerTintColorWhite,
+              title: 'Confirmation',
             }} />
             <Stack.Screen name="PinConfirmation" component={PinConfirmation} options={{
               headerStyle: headerStyle.headerStyleWhite,

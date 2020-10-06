@@ -22,7 +22,7 @@ const AmountInput = ({ navigation }) => {
 
    const onSubmit = (data) => {
       dispatch(inputAmount(data));
-      navigation.navigate('PinConfirmation');
+      navigation.navigate('TransferConfirmation');
    };
 
    return (
