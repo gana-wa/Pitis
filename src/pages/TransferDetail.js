@@ -7,6 +7,8 @@ import { API_URL } from '../utils/environment';
 import { DateTime } from 'luxon';
 import { clearTransaction } from '../redux/actions/transaction';
 import { fetchBalance } from '../redux/actions/user';
+import { showLocalNotification } from '../utils/handleNotification';
+import PushNotification from 'react-native-push-notification';
 
 import * as color from '../styles/colorStyles';
 
@@ -20,9 +22,27 @@ const TransferDetail = ({ navigation }) => {
    const stateTransaction = useSelector(state => state.transaction);
    const currentUser = useSelector(state => state.auth.user);
 
+   const channelId = 'transfer-notification';
+
    useEffect(() => {
       dispatch(fetchBalance(currentUser.user_id));
-   }, [dispatch, currentUser.user_id]);
+      PushNotification.createChannel({
+         channelId,
+         channelName: 'transfer',
+         channelDescription: 'transfer info',
+         soundName: 'default',
+         importance: 4,
+         // vibrate: ,
+      });
+      if (stateTransaction.isSuccess) {
+         showLocalNotification(
+            'Transfer Success',
+            // `to ${stateTransaction.receiver.first_name}`,
+            `to ${stateTransaction.receiver.phone}`,
+            channelId,
+         );
+      }
+   }, [dispatch, currentUser.user_id, stateTransaction.isSuccess, stateTransaction.receiver.phone]);
 
    return (
       <SafeAreaView style={styles.container}>
