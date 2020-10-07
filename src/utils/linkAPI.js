@@ -36,3 +36,11 @@ export const history = (id) => {
 export const fetchBalance = (id) => {
    return Axios.get(`${API_URL}/user/balance/${id}`);
 };
+
+export const fetchEmail = (data) => {
+   return Axios.post(`${API_URL}/auth/email`, data);
+};
+
+export const changePassword = (id, data) => {
+   return Axios.patch(`${API_URL}/auth/password/${id}`, data);
+};

@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as color from '../styles/colorStyles';
 
 const PersonalInfo = ({ navigation }) => {
-   const { first_name, last_name, phone } = useSelector(
+   const { first_name, last_name, phone, email } = useSelector(
       (state) => state.auth.user,
    );
 
@@ -39,7 +39,7 @@ const PersonalInfo = ({ navigation }) => {
                {last_name === null ? (
                   <Text style={styles.textItemNull}>Not set</Text>
                ) : (
-                     <Text style={styles.textItem}>Email</Text>
+                     <Text style={styles.textItem}>{email}</Text>
                   )}
             </View>
          </View>

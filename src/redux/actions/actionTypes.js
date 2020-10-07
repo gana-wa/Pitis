@@ -12,6 +12,8 @@ export const loggedOut = 'LOGGED_OUT';
 export const editUser = 'EDIT_USER';
 export const contactFetched = 'CONTACT_FETCHED';
 export const fetchBalance = 'FETCH_BALANCE';
+export const fetchEmail = 'FETCH_EMAIL';
+export const changePassword = 'CHANGE_PASSWORD';
 
 export const addReceiver = 'ADD_RECEIVER';
 export const inputAmount = 'INPUT_AMOUNT';
@@ -19,4 +21,6 @@ export const insert_transaction = 'INSERT_TRANSACTION';
 export const topUp = 'TOP_UP';
 export const historyFetched = 'HISTORY_FETCHED';
 export const clearTransaction = 'CLEAR_TRANSACTION';
+
+export const clearState = 'CLEAR_STATE';
 

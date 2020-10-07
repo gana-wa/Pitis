@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
             routes: [{ name: 'Home' }],
          });
       }
-      if (msg !== '...Loading') {
+      if (msg !== '...Loading' && msg !== '') {
          ToastAndroid.show(msg, ToastAndroid.SHORT);
       }
    }, [isLoggedIn, navigation, msg]);

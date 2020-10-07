@@ -1,105 +1,165 @@
-import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, SafeAreaView, StyleSheet, ToastAndroid } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Input, Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
+import { useForm, Controller } from 'react-hook-form';
+import { changePassword, clearState } from '../redux/actions/auth';
 
 import * as color from '../styles/colorStyles';
 
 const ChangePassword = ({ navigation }) => {
-   const [showPassword, setShowPassword] = useState(true);
-   const handleShowPassword = () => {
-      setShowPassword(!showPassword);
+   const [securedPassword1, setSecuredPassword1] = useState(true);
+   const [securedPassword2, setSecuredPassword2] = useState(true);
+   const [securedPassword3, setSecuredPassword3] = useState(true);
+   const handleShowPassword1 = () => {
+      setSecuredPassword1(!securedPassword1);
+   };
+   const handleShowPassword2 = () => {
+      setSecuredPassword2(!securedPassword2);
+   };
+   const handleShowPassword3 = () => {
+      setSecuredPassword3(!securedPassword3);
+   };
+
+   const dispatch = useDispatch();
+
+   const { msg, user, isSuccess } = useSelector(
+      (state) => state.auth
+   );
+
+   useEffect(() => {
+      if (msg !== '...Loading' && msg !== '') {
+         ToastAndroid.show(msg, ToastAndroid.SHORT);
+      }
+      if (msg === 'Successfully updated') {
+         navigation.goBack();
+         dispatch(clearState());
+      }
+   }, [isSuccess, msg, navigation, dispatch]);
+
+   const { control, handleSubmit, errors, getValues } = useForm();
+
+   const onSubmit = (data) => {
+      if (data.newPassword !== data.newPasswordRepeat) {
+         console.log('Password didnt match');
+      } else {
+         dispatch(changePassword(user.user_id, data));
+      }
    };
 
    return (
       <SafeAreaView style={styles.container}>
          <View>
             <Text style={styles.subtitle}>You must enter your current password and then type your new password twice.</Text>
-            <Input
-               placeholder="Current Password"
-               leftIcon={
-                  <Icon
-                     name="lock"
-                     size={20}
-                     color={color.input}
+            <Controller
+               control={control}
+               render={({ onChange, onBlur, value }) => (
+                  <Input
+                     placeholder="Current Password"
+                     leftIcon={
+                        <Icon
+                           name="lock"
+                           size={20}
+                           color={color.input}
+                        />
+                     }
+                     rightIcon={
+                        <Icon
+                           onPress={handleShowPassword1}
+                           name={securedPassword1 ? 'eye-off' : 'eye'}
+                           size={18}
+                           color={color.input}
+                        />
+                     }
+                     inputContainerStyle={styles.input}
+                     inputStyle={styles.input}
+                     placeholderTextColor={color.input}
+                     secureTextEntry={securedPassword1}
+                     onBlur={onBlur}
+                     onChangeText={text => onChange(text)}
+                     value={value}
                   />
-               }
-               rightIcon={
-                  <Icon
-                     onPress={handleShowPassword}
-                     name={showPassword ? 'eye-off' : 'eye'}
-                     size={18}
-                     color={color.input}
-                  />
-               }
-               inputContainerStyle={styles.input}
-               inputStyle={styles.input}
-               placeholderTextColor={color.input}
-               secureTextEntry={showPassword}
-               // onBlur={onBlur}
-               // onChangeText={text => onChange(text)}
-               // value={value}
-               keyboardType="email-address"
+               )}
+               name="password"
+               rules={{ required: true }}
+               defaultValue=""
             />
-            <Input
-               placeholder="New Password"
-               leftIcon={
-                  <Icon
-                     name="lock"
-                     size={20}
-                     color={color.input}
+            {errors.password && <Text style={styles.textFormError}>Password is required.</Text>}
+            <Controller
+               control={control}
+               render={({ onChange, onBlur, value }) => (
+                  <Input
+                     placeholder="New Password"
+                     leftIcon={
+                        <Icon
+                           name="lock"
+                           size={20}
+                           color={color.input}
+                        />
+                     }
+                     rightIcon={
+                        <Icon
+                           onPress={handleShowPassword2}
+                           name={securedPassword2 ? 'eye-off' : 'eye'}
+                           size={18}
+                           color={color.input}
+                        />
+                     }
+                     inputContainerStyle={styles.input}
+                     inputStyle={styles.input}
+                     placeholderTextColor={color.input}
+                     secureTextEntry={securedPassword2}
+                     onBlur={onBlur}
+                     onChangeText={text => onChange(text)}
+                     value={value}
                   />
-               }
-               rightIcon={
-                  <Icon
-                     onPress={handleShowPassword}
-                     name={showPassword ? 'eye-off' : 'eye'}
-                     size={18}
-                     color={color.input}
-                  />
-               }
-               inputContainerStyle={styles.input}
-               inputStyle={styles.input}
-               placeholderTextColor={color.input}
-               secureTextEntry={showPassword}
-               // onBlur={onBlur}
-               // onChangeText={text => onChange(text)}
-               // value={value}
-               keyboardType="email-address"
+               )}
+               name="newPassword"
+               rules={{ required: true }}
+               defaultValue=""
             />
-            <Input
-               placeholder="Repeat Password"
-               leftIcon={
-                  <Icon
-                     name="lock"
-                     size={20}
-                     color={color.input}
+            {errors.newPassword && <Text style={styles.textFormError}>New password is required.</Text>}
+            <Controller
+               control={control}
+               render={({ onChange, onBlur, value }) => (
+                  <Input
+                     placeholder="Repeat Password"
+                     leftIcon={
+                        <Icon
+                           name="lock"
+                           size={20}
+                           color={color.input}
+                        />
+                     }
+                     rightIcon={
+                        <Icon
+                           onPress={handleShowPassword3}
+                           name={securedPassword3 ? 'eye-off' : 'eye'}
+                           size={18}
+                           color={color.input}
+                        />
+                     }
+                     inputContainerStyle={styles.input}
+                     inputStyle={styles.input}
+                     placeholderTextColor={color.input}
+                     secureTextEntry={securedPassword3}
+                     onBlur={onBlur}
+                     onChangeText={text => onChange(text)}
+                     value={value}
                   />
-               }
-               rightIcon={
-                  <Icon
-                     onPress={handleShowPassword}
-                     name={showPassword ? 'eye-off' : 'eye'}
-                     size={18}
-                     color={color.input}
-                  />
-               }
-               inputContainerStyle={styles.input}
-               inputStyle={styles.input}
-               placeholderTextColor={color.input}
-               secureTextEntry={showPassword}
-               // onBlur={onBlur}
-               // onChangeText={text => onChange(text)}
-               // value={value}
-               keyboardType="email-address"
+               )}
+               name="newPasswordRepeat"
+               rules={{ required: true }}
+               defaultValue=""
             />
+            {getValues('newPassword') !== getValues('newPasswordRepeat') && <Text style={styles.textFormError}>Password didn't match.</Text>}
          </View>
          <Button
             title="Change Password"
             buttonStyle={styles.buttonSubmit}
             titleStyle={styles.buttonSubmitText}
-            onPress={() => navigation.goBack()}
+            onPress={handleSubmit(onSubmit)}
          />
       </SafeAreaView>
    );
@@ -136,6 +196,11 @@ const styles = StyleSheet.create({
       fontSize: 18,
       color: color.white,
       // fontWeight: '700',
+   },
+   textFormError: {
+      color: color.error,
+      fontSize: 12,
+      marginLeft: '4%',
    },
 });
 

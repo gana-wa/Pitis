@@ -28,3 +28,22 @@ export const logOut = () => {
    };
 };
 
+export const fetchEmail = (data) => {
+   return {
+      type: actions.fetchEmail,
+      payload: api.fetchEmail(data),
+   };
+};
+
+export const changePassword = (id, data) => {
+   return {
+      type: actions.changePassword,
+      payload: api.changePassword(id, data),
+   };
+};
+
+export const clearState = () => {
+   return {
+      type: actions.clearState,
+   };
+};

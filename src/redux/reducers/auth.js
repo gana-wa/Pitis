@@ -10,6 +10,7 @@ const initialState = {
    user: {
       user_id: '',
       username: '',
+      email: '',
       balance: '',
       first_name: '',
       last_name: '',
@@ -47,6 +48,7 @@ const authReducer = (state = initialState, action) => {
                user: {
                   ...state.user,
                   username: action.payload.data.data.username,
+                  email: action.payload.data.data.email,
                   user_id: action.payload.data.data.user_id,
                   balance: action.payload.data.data.balance,
                   first_name: action.payload.data.data.first_name,
@@ -179,6 +181,82 @@ const authReducer = (state = initialState, action) => {
                ...state.user,
                phone: action.payload.data.data.phone,
             },
+         };
+      case actions.fetchEmail + actions.pending:
+         return {
+            ...state,
+            isPeding: true,
+            msg: '...Loading',
+         };
+      case actions.fetchEmail + actions.rejected:
+         return {
+            ...state,
+            isRejected: true,
+            isPending: false,
+            msg: 'Fetch email failed..!',
+         };
+      case actions.fetchEmail + actions.fulfilled:
+         if (action.payload.data.isSuccess) {
+            return {
+               ...state,
+               isSuccess: true,
+               isPending: false,
+               isRejected: false,
+               user: {
+                  ...state.user,
+                  user_id: action.payload.data.data.user_id,
+                  email: action.payload.data.data.email,
+               },
+            };
+         } else {
+            return {
+               ...state,
+               isSuccess: false,
+               isPending: false,
+               isLoggedIn: false,
+               msg: action.payload.data.data.msg,
+            };
+         }
+      case actions.changePassword + actions.pending:
+         return {
+            ...state,
+            isPeding: true,
+            msg: '...Loading',
+         };
+      case actions.changePassword + actions.rejected:
+         return {
+            ...state,
+            isRejected: true,
+            isPending: false,
+            msg: 'Change password failed..!',
+         };
+      case actions.changePassword + actions.fulfilled:
+         if (action.payload.data.isSuccess) {
+            return {
+               ...state,
+               isSuccess: true,
+               isPending: false,
+               isRejected: false,
+               msg: action.payload.data.data.msg,
+            };
+         } else {
+            return {
+               ...state,
+               isSuccess: false,
+               isPending: false,
+               isLoggedIn: false,
+               msg: action.payload.data.data.msg,
+            };
+         }
+      case actions.clearState:
+         return {
+            ...state,
+            isLoggedIn: false,
+            isPending: false,
+            isSuccess: false,
+            isRejected: false,
+            msg: '',
+            register_id: '',
          };
       default:
          return state;
