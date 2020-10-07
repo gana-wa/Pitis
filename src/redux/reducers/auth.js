@@ -258,6 +258,27 @@ const authReducer = (state = initialState, action) => {
             msg: '',
             register_id: '',
          };
+      case actions.loggedOut:
+         return {
+            isLoggedIn: false,
+            isPending: false,
+            isSuccess: false,
+            isRejected: false,
+            msg: '',
+            register_id: '',
+            user: {
+               user_id: '',
+               username: '',
+               email: '',
+               balance: '',
+               first_name: '',
+               last_name: '',
+               phone: '',
+               photo: '',
+               token: '',
+               pin: '',
+            },
+         };
       default:
          return state;
    }

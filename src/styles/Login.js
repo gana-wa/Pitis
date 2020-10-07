@@ -86,6 +86,11 @@ const styles = StyleSheet.create({
       color: color.primary,
       fontSize: 16,
    },
+   textFormError: {
+      color: color.error,
+      fontSize: 12,
+      marginLeft: '4%',
+   },
 });
 
 export default styles;

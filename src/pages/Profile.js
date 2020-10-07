@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/environment';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
+import { logOut } from '../redux/actions/auth';
 
 import * as color from '../styles/colorStyles';
 
@@ -13,12 +14,21 @@ const Profile = ({ navigation }) => {
    const { username, first_name, last_name, phone, photo } = useSelector(
       (state) => state.auth.user,
    );
+   const dispatch = useDispatch();
 
    const [isEnabled, setIsEnabled] = useState(false);
    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
    const handleNavigation = (to) => {
       navigation.navigate(to);
+   };
+
+   const handleLogout = () => {
+      dispatch(logOut());
+      navigation.reset({
+         index: 0,
+         routes: [{ name: 'Login' }],
+      });
    };
 
    const profilImg = `${API_URL}${photo}`;
@@ -105,6 +115,7 @@ const Profile = ({ navigation }) => {
                title="Logout"
                buttonStyle={styles.buttonLogout}
                titleStyle={{ ...styles.textButton, color: color.error }}
+               onPress={handleLogout}
             />
          </View>
       </SafeAreaView>
