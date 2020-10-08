@@ -171,17 +171,31 @@ const authReducer = (state = initialState, action) => {
             msg: 'Edit user failed..!',
          };
       case actions.editUser + actions.fulfilled:
-         return {
-            ...state,
-            isSuccess: true,
-            isPending: false,
-            isRejected: false,
-            msg: action.payload.data.data.msg,
-            user: {
-               ...state.user,
-               phone: action.payload.data.data.phone,
-            },
-         };
+         if (action.payload.data.data.phone === undefined) {
+            return {
+               ...state,
+               isSuccess: true,
+               isPending: false,
+               isRejected: false,
+               msg: action.payload.data.data.msg,
+               user: {
+                  ...state.user,
+                  photo: action.payload.data.data.photo,
+               },
+            };
+         } else if (action.payload.data.data.photo === undefined) {
+            return {
+               ...state,
+               isSuccess: true,
+               isPending: false,
+               isRejected: false,
+               msg: action.payload.data.data.msg,
+               user: {
+                  ...state.user,
+                  phone: action.payload.data.data.phone,
+               },
+            };
+         } break;
       case actions.fetchEmail + actions.pending:
          return {
             ...state,

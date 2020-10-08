@@ -1,10 +1,10 @@
 import * as actions from './actionTypes';
 import * as api from '../../utils/linkAPI';
 
-export const editUser = (id, data) => {
+export const editUser = (id, data, config) => {
    return {
       type: actions.editUser,
-      payload: api.editUser(id, data),
+      payload: api.editUser(id, data, config),
    };
 };
 

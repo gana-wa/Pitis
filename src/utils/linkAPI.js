@@ -13,8 +13,8 @@ export const updatePin = (id, data) => {
    return Axios.patch(`${API_URL}/auth/pin/${id}`, data);
 };
 
-export const editUser = (id, data) => {
-   return Axios.patch(`${API_URL}/user/edit/${id}`, data);
+export const editUser = (id, data, config) => {
+   return Axios.patch(`${API_URL}/user/edit/${id}`, data, config);
 };
 
 export const showContact = (id) => {

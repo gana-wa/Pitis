@@ -1,27 +1,96 @@
-import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity, Switch, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity, Switch, Pressable, ToastAndroid } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/environment';
 import { Button } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 import { logOut } from '../redux/actions/auth';
+import { editUser } from '../redux/actions/user';
+import ImagePicker from 'react-native-image-picker';
+import Axios from 'axios';
 
 import * as color from '../styles/colorStyles';
 
 // import defaultProfile from '../assets/img/default_profile.png';
 
 const Profile = ({ navigation }) => {
-   const { username, first_name, last_name, phone, photo } = useSelector(
+
+   const handleImgPick = () => {
+      const options = {
+         title: 'Select Picture',
+         // customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+         storageOptions: {
+            skipBackup: true,
+            path: 'images',
+         },
+         noData: true,
+      };
+
+      ImagePicker.showImagePicker(options, (response) => {
+         console.log('Response = ', response);
+
+         if (response.didCancel) {
+            console.log('User cancelled image picker');
+         } else if (response.error) {
+            console.log('ImagePicker Error: ', response.error);
+         } else if (response.customButton) {
+            console.log('User tapped custom button: ', response.customButton);
+         } else {
+            const source = response;
+            setFormResponse({ ...formRespone, photo: source });
+         }
+      });
+   };
+
+   const { user_id, first_name, last_name, phone, photo } = useSelector(
       (state) => state.auth.user,
+   );
+   const { msg } = useSelector(
+      (state) => state.auth,
    );
    const dispatch = useDispatch();
 
    const [isEnabled, setIsEnabled] = useState(false);
+   const [formRespone, setFormResponse] = useState({
+      first_name: first_name,
+      photo: '',
+   });
    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
    const handleNavigation = (to) => {
       navigation.navigate(to);
    };
+
+   const handleSubmit = () => {
+      // console.log(formRespone);
+      let formData = new FormData();
+      formData.append('photo', {
+         uri: `file://${formRespone.photo.path}`,
+         type: formRespone.photo.type,
+         name: formRespone.photo.fileName,
+         size: formRespone.photo.fileSize,
+      });
+
+      const configHeader = {
+         headers: {
+            'content-type': 'multipart/form-data',
+            contentType: false,
+            mimeType: 'multipart/form-data',
+            'cache-control': 'no-cache',
+            accept: 'application/json',
+            // "x-access-token":
+            // "Bearer token",
+         },
+      };
+
+      dispatch(editUser(user_id, formData, configHeader));
+   };
+
+   useEffect(() => {
+      if (msg !== '...Loading' && msg !== '') {
+         ToastAndroid.show(msg, ToastAndroid.SHORT);
+      }
+   }, [msg]);
 
    const handleLogout = () => {
       dispatch(logOut());
@@ -35,26 +104,43 @@ const Profile = ({ navigation }) => {
    return (
       <SafeAreaView style={styles.container}>
          <View style={styles.containerTop}>
-            {photo === null ? (
-               <View style={styles.profileImgBlank}>
-                  <Icon
-                     name="user"
-                     size={50}
-                     color={color.primary}
-                  />
-               </View>
+            {formRespone.photo.length < 1 ? (
+               photo === null ? (
+                  <View style={styles.profileImgBlank}>
+                     <Icon
+                        name="user"
+                        size={50}
+                        color={color.primary}
+                     />
+                  </View>
+               ) : (
+                     <Image source={{ uri: profilImg }} style={styles.profileImg} />
+                  )
             ) : (
-                  <Image source={{ uri: profilImg }} style={styles.profileImg} />
+                  <Image source={formRespone.photo} style={styles.profileImg} />
                )}
+
             {/* <Image source={photo === null ? defaultProfile : ({ uri: profilImg })} style={styles.profileImg} /> */}
-            <Pressable style={styles.editButton}>
-               <Icon
-                  name="edit-2"
-                  size={14}
-                  color={color.subtitle}
-               />
-               <Text style={styles.editButtonText}>Edit</Text>
-            </Pressable>
+            {formRespone.photo.length < 1 ? (
+               <Pressable style={styles.editButton} onPress={() => handleImgPick()}>
+                  <Icon
+                     name="edit-2"
+                     size={14}
+                     color={color.subtitle}
+                  />
+                  <Text style={styles.editButtonText}>Edit</Text>
+               </Pressable>
+            ) : (
+                  <Pressable style={styles.editButton} onPress={handleSubmit}>
+                     <Icon
+                        name="edit-2"
+                        size={14}
+                        color={color.subtitle}
+                     />
+                     <Text style={styles.editButtonText}>Save</Text>
+                  </Pressable>
+               )}
+
             {last_name === null ? (
                <Text style={styles.textName}>{first_name}</Text>
             ) : (
