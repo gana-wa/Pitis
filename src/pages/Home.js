@@ -1,26 +1,57 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Image, StatusBar, Pressable, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/environment';
 import { fetchBalance } from '../redux/actions/user';
+import { history } from '../redux/actions/transaction';
 
 import * as color from '../styles/colorStyles';
 
 import profileImg from '../assets/img/profile.jpg';
 import defaultProfile from '../assets/img/default_profile.png';
 
+const Item = ({ data }) => {
+   const profilImg = `${API_URL}${data.photo}`;
+   return (
+      <View style={styles.containerTransaction}>
+         <View style={styles.profileContainer}>
+            {data.category === 'Top Up' ? null : (
+               <Image source={data.photo === null ? defaultProfile : ({ uri: profilImg })} style={styles.profileImg} />
+            )}
+            <View style={styles.textHelloContainer}>
+               {data.category === 'Top Up' ? (
+                  <Text style={styles.textNameTransaction}>Top Up Zwallet</Text>
+               ) : (
+                     <Text style={styles.textNameTransaction}>{data.last_name === null ? data.first_name : `${data.first_name} ${data.last_name}`}</Text>
+                  )}
+               <Text style={styles.textTransaction}>{data.category}</Text>
+            </View>
+         </View>
+         {data.type === 'in' ? (
+            <Text style={styles.textTransactionNumberIncome}>{`+Rp${(data.amount).toLocaleString('id-ID')}`}</Text>
+         ) : (
+               <Text style={styles.textTransactionNumberOutcome}>{`-Rp${(data.amount).toLocaleString('id-ID')}`}</Text>
+            )}
+      </View>
+   );
+};
+
 const Home = ({ navigation }) => {
 
-   const { username, first_name, last_name, phone, photo, balance, user_id } = useSelector(
+   const { first_name, last_name, phone, photo, balance, user_id } = useSelector(
       (state) => state.auth.user,
    );
+   const stateHistory = useSelector(state => state.transaction.history);
+
+   const dataHistory = stateHistory.slice(0, 3);
 
    const dispatch = useDispatch();
 
    useEffect(() => {
       dispatch(fetchBalance(user_id));
+      dispatch(history(user_id));
    }, [dispatch, user_id]);
 
    const profilImg = `${API_URL}${photo}`;
@@ -87,36 +118,11 @@ const Home = ({ navigation }) => {
                   <Text style={styles.dividerSeeAll}>See all</Text>
                </Pressable>
             </View>
-            <View style={styles.containerTransaction}>
-               <View style={styles.profileContainer}>
-                  <Image source={profileImg} style={styles.profileImg} />
-                  <View style={styles.textHelloContainer}>
-                     <Text style={styles.textNameTransaction}>Samuel Suhi</Text>
-                     <Text style={styles.textTransaction}>Transfer</Text>
-                  </View>
-               </View>
-               <Text style={styles.textTransactionNumberIncome}>+Rp50.000</Text>
-            </View>
-            <View style={styles.containerTransaction}>
-               <View style={styles.profileContainer}>
-                  <Image source={profileImg} style={styles.profileImg} />
-                  <View style={styles.textHelloContainer}>
-                     <Text style={styles.textNameTransaction}>Samuel Suhi</Text>
-                     <Text style={styles.textTransaction}>Transfer</Text>
-                  </View>
-               </View>
-               <Text style={styles.textTransactionNumberIncome}>+Rp50.000</Text>
-            </View>
-            <View style={styles.containerTransaction}>
-               <View style={styles.profileContainer}>
-                  <Image source={profileImg} style={styles.profileImg} />
-                  <View style={styles.textHelloContainer}>
-                     <Text style={styles.textNameTransaction}>Samuel Suhi</Text>
-                     <Text style={styles.textTransaction}>Transfer</Text>
-                  </View>
-               </View>
-               <Text style={styles.textTransactionNumberIncome}>+Rp50.000</Text>
-            </View>
+            <FlatList
+               data={dataHistory}
+               renderItem={({ item }) => <Item data={item} />}
+               keyExtractor={item => item.transaction_id.toString()}
+            />
          </View>
       </View>
    );
@@ -211,6 +217,7 @@ const styles = StyleSheet.create({
    containerTransaction: {
       backgroundColor: color.white,
       marginTop: '6%',
+      marginBottom: 1,
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
