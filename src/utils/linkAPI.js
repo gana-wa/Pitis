@@ -21,6 +21,10 @@ export const showContact = (id) => {
    return Axios.get(`${API_URL}/user/alluser/${id}`);
 };
 
+export const searchUser = (data) => {
+   return Axios.post(`${API_URL}/user/search`, data);
+};
+
 export const topUp = (data) => {
    return Axios.post(`${API_URL}/transaction/topup`, data);
 };

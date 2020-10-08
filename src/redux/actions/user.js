@@ -15,6 +15,13 @@ export const showContact = (id) => {
    };
 };
 
+export const searchUser = (data) => {
+   return {
+      type: actions.searchUser,
+      payload: api.searchUser(data),
+   };
+};
+
 export const fetchBalance = (id) => {
    return {
       type: actions.fetchBalance,

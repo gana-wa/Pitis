@@ -11,6 +11,7 @@ export const loggedOut = 'LOGGED_OUT';
 
 export const editUser = 'EDIT_USER';
 export const contactFetched = 'CONTACT_FETCHED';
+export const searchUser = 'SEARCH_USER';
 export const fetchBalance = 'FETCH_BALANCE';
 export const fetchEmail = 'FETCH_EMAIL';
 export const changePassword = 'CHANGE_PASSWORD';

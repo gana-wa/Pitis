@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { Button, SearchBar } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/environment';
-import { showContact } from '../redux/actions/user';
+import { showContact, searchUser } from '../redux/actions/user';
 import { addReceiver } from '../redux/actions/transaction';
 
 import defaultProfile from '../assets/img/default_profile.png';
@@ -65,6 +65,11 @@ const FindReceiver = ({ navigation }) => {
 
    const [search, setSearch] = useState('');
 
+   const handleSubmitSearch = () => {
+      console.log(search, curentUser.user_id);
+      dispatch(searchUser({ first_name: search, user_id: curentUser.user_id }));
+   };
+
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="dark-content" backgroundColor={color.backgroud} />
@@ -87,6 +92,7 @@ const FindReceiver = ({ navigation }) => {
                      inputContainerStyle={{ backgroundColor: 'rgba(58, 61, 66, 0.1)', borderRadius: 12, paddingLeft: 10 }}
                      inputStyle={{ fontSize: 16, fontWeight: '400' }}
                      placeholderTextColor="rgba(58, 61, 66, 0.4)"
+                     onSubmitEditing={handleSubmitSearch}
                   />
                )}
                renderItem={({ item }) => <Item data={item} sender={curentUser.user_id} dispatch={dispatch} navigation={navigation} />}

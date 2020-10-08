@@ -27,9 +27,48 @@ const userReducer = (state = initialState, action) => {
             ...state,
             isRejected: true,
             isPending: false,
-            msg: 'Login failed..!',
+            msg: 'Fetch failed..!',
          };
       case actions.contactFetched + actions.fulfilled:
+         if (action.payload.data.isSuccess) {
+            return {
+               ...state,
+               isSuccess: true,
+               isPending: false,
+               msg: action.payload.data.data.msg,
+               // conctact: {
+               //    ...state.contact,
+               //    user_id: action.payload.data.data.user_id,
+               //    first_name: action.payload.data.data.first_name,
+               //    last_name: action.payload.data.data.last_name,
+               //    phone: action.payload.data.data.phone,
+               //    photo: action.payload.data.data.photo,
+               // },
+               contact: action.payload.data.data,
+            };
+         } else {
+            return {
+               ...state,
+               isSuccess: false,
+               isPending: false,
+               isLoggedIn: false,
+               msg: action.payload.data.data.msg,
+            };
+         }
+      case actions.searchUser + actions.pending:
+         return {
+            ...state,
+            isPeding: true,
+            msg: '...Loading',
+         };
+      case actions.searchUser + actions.rejected:
+         return {
+            ...state,
+            isRejected: true,
+            isPending: false,
+            msg: 'Search failed..!',
+         };
+      case actions.searchUser + actions.fulfilled:
          if (action.payload.data.isSuccess) {
             return {
                ...state,
