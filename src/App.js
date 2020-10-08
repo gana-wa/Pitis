@@ -27,6 +27,8 @@ import PersonalInfo from './pages/PersonalInfo';
 import AddPhoneNumber from './pages/AddPhoneNumber';
 import ChangePassword from './pages/ChangePassword';
 
+import SplashScreen from './pages/SplashScreen';
+
 const { persistor, store } = configureStore();
 
 const Stack = createStackNavigator();
@@ -55,7 +57,8 @@ const App = () => {
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
         <NavigationContainer>
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName="SplashScreen">
+            <Stack.Screen name="SplashScreen" component={SplashScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
             <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
