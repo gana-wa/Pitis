@@ -107,11 +107,26 @@ const Profile = ({ navigation }) => {
    }, [msg]);
 
    const handleLogout = () => {
-      dispatch(logOut());
-      navigation.reset({
-         index: 0,
-         routes: [{ name: 'Login' }],
-      });
+      Alert.alert(
+         'Logout',
+         'Are you sure want to logout?',
+         [
+            {
+               text: 'Cancel',
+            },
+            {
+               text: 'Ok',
+               onPress: () => {
+                  dispatch(logOut());
+                  navigation.reset({
+                     index: 0,
+                     routes: [{ name: 'Login' }],
+                  });
+               },
+            },
+         ],
+         { cancelable: false },
+      );
    };
 
    const profilImg = `${API_URL}${photo}`;
