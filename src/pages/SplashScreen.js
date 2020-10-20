@@ -22,7 +22,7 @@ const SplashScreen = ({ navigation }) => {
                routes: [{ name: 'Login' }],
             });
          }
-      }, 500);
+      }, 1000);
    }, [isLoggedIn, navigation, msg]);
 
    return (

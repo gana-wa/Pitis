@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity, Switch, Pressable, ToastAndroid } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, Image, TouchableOpacity, Switch, Pressable, ToastAndroid, Alert } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL } from '../utils/environment';
 import { Button } from 'react-native-elements';
@@ -37,7 +37,21 @@ const Profile = ({ navigation }) => {
             console.log('User tapped custom button: ', response.customButton);
          } else {
             const source = response;
-            setFormResponse({ ...formRespone, photo: source });
+            if (response.fileSize > (2 * 1000 * 1000)) {
+               Alert.alert(
+                  'File Size is too Large',
+                  'Please Select Photo Below 2MB',
+                  [
+                     {
+                        text: 'Understand',
+                        onPress: () => console.log('Ok pressed'),
+                     },
+                  ],
+                  { cancelable: false }
+               );
+            } else {
+               setFormResponse({ ...formRespone, photo: source });
+            }
          }
       });
    };
