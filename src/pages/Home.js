@@ -3,9 +3,13 @@ import { View, Text, StyleSheet, Image, StatusBar, Pressable, FlatList } from 'r
 import Icon from 'react-native-vector-icons/Feather';
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
-import { API_URL } from '../utils/environment';
+import { API_URL, SOCKET_URL } from '../utils/environment';
 import { fetchBalance } from '../redux/actions/user';
 import { history } from '../redux/actions/transaction';
+import io from 'socket.io-client';
+import { setSystemSocket } from '../redux/actions/system';
+import { showLocalNotification } from '../utils/handleNotification';
+import PushNotification from 'react-native-push-notification';
 
 import * as color from '../styles/colorStyles';
 
@@ -44,6 +48,7 @@ const Home = ({ navigation }) => {
       (state) => state.auth.user,
    );
    const stateHistory = useSelector(state => state.transaction.history);
+   const { socket } = useSelector(state => state.system);
 
    const dataHistory = stateHistory.slice(0, 3);
 
@@ -53,6 +58,39 @@ const Home = ({ navigation }) => {
       dispatch(fetchBalance(user_id));
       dispatch(history(user_id));
    }, [dispatch, user_id]);
+
+   useEffect(() => {
+      if (socket !== null) return;
+      const newSocket = io(SOCKET_URL, {
+         query: { id: user_id },
+      });
+      dispatch(setSystemSocket(newSocket));
+      return () => newSocket.close();
+   }, [user_id]);
+
+   const channelId = 'transfer-notification';
+
+   useEffect(() => {
+      if (socket === null) return;
+      PushNotification.createChannel(
+         {
+            channelId,
+            channelName: 'transfer',
+            channelDescription: 'transfer info',
+         }, (created) => console.log(`createChannel returned '${created}'`)
+      );
+      socket.on('transaction', ({ title, message }) => {
+         dispatch(fetchBalance(user_id));
+         showLocalNotification(
+            channelId,
+            title,
+            message,
+         );
+      });
+      return () => {
+         socket.off('transaction');
+      };
+   }, [socket]);
 
    const profilImg = `${API_URL}${photo}`;
 

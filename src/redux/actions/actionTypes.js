@@ -25,3 +25,5 @@ export const clearTransaction = 'CLEAR_TRANSACTION';
 
 export const clearState = 'CLEAR_STATE';
 
+export const setSystemSocket = 'SET_SYSTEM_SOCKET';
+export const enableNotification = 'ENABLE_NOTIFICATION';

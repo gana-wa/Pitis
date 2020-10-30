@@ -33,7 +33,11 @@ const Item = ({ sender, dispatch, data, navigation }) => {
                   <Image source={{ uri: `${API_URL}${data.photo}` }} style={styles.profileImg} />
                )}
             <View style={styles.textHelloContainer}>
-               <Text style={styles.textNameTransaction}>{`${data.first_name} ${data.last_name}`}</Text>
+               {data.last_name === null ? (
+                  <Text style={styles.textNameTransaction}>{`${data.first_name}`}</Text>
+               ) : (
+                     <Text style={styles.textNameTransaction}>{`${data.first_name} ${data.last_name}`}</Text>
+                  )}
                <Text style={styles.textTransaction}>{data.phone}</Text>
             </View>
          </View>

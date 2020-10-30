@@ -30,9 +30,6 @@ const TransferDetail = ({ navigation }) => {
          channelId,
          channelName: 'transfer',
          channelDescription: 'transfer info',
-         soundName: 'default',
-         importance: 4,
-         // vibrate: ,
       });
       if (stateTransaction.isSuccess) {
          showLocalNotification(

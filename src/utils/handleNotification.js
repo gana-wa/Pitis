@@ -17,6 +17,8 @@ const showLocalNotificationScheduled = (title, message, channelId) => {
    });
 };
 
+
+
 const cancelAllNotification = () => {
    PushNotification.cancelAllLocalNotifications();
 };

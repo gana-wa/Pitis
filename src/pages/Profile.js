@@ -7,7 +7,6 @@ import Icon from 'react-native-vector-icons/Feather';
 import { logOut } from '../redux/actions/auth';
 import { editUser } from '../redux/actions/user';
 import ImagePicker from 'react-native-image-picker';
-import Axios from 'axios';
 
 import * as color from '../styles/colorStyles';
 
