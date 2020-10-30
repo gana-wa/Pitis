@@ -7,6 +7,7 @@ const initialState = {
    isRejected: false,
    msg: '',
    register_id: '',
+   updatePwd: {},
    user: {
       user_id: '',
       username: '',
@@ -231,6 +232,37 @@ const authReducer = (state = initialState, action) => {
                msg: action.payload.data.data.msg,
             };
          }
+      case actions.sendOtp + actions.pending:
+         return {
+            ...state,
+            isPeding: true,
+            msg: '...Loading',
+         };
+      case actions.sendOtp + actions.rejected:
+         return {
+            ...state,
+            isRejected: true,
+            isPending: false,
+            msg: 'Send otp failed..!',
+         };
+      case actions.sendOtp + actions.fulfilled:
+         if (action.payload.data.isSuccess) {
+            return {
+               ...state,
+               isSuccess: true,
+               isPending: false,
+               isRejected: false,
+               updatePwd: action.payload.data.data,
+            };
+         } else {
+            return {
+               ...state,
+               isSuccess: false,
+               isPending: false,
+               isLoggedIn: false,
+               // msg: action.payload.data.data.msg,
+            };
+         }
       case actions.changePassword + actions.pending:
          return {
             ...state,
@@ -270,6 +302,7 @@ const authReducer = (state = initialState, action) => {
             isSuccess: false,
             isRejected: false,
             msg: '',
+            updatePwd: {},
             register_id: '',
          };
       case actions.loggedOut:
@@ -280,6 +313,7 @@ const authReducer = (state = initialState, action) => {
             isRejected: false,
             msg: '',
             register_id: '',
+            updatePwd: {},
             user: {
                user_id: '',
                username: '',

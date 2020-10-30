@@ -14,6 +14,7 @@ export const contactFetched = 'CONTACT_FETCHED';
 export const searchUser = 'SEARCH_USER';
 export const fetchBalance = 'FETCH_BALANCE';
 export const fetchEmail = 'FETCH_EMAIL';
+export const sendOtp = 'SEND_OTP';
 export const changePassword = 'CHANGE_PASSWORD';
 
 export const addReceiver = 'ADD_RECEIVER';

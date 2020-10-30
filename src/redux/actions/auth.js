@@ -35,6 +35,13 @@ export const fetchEmail = (data) => {
    };
 };
 
+export const sendOtp = (data) => {
+   return {
+      type: actions.sendOtp,
+      payload: api.sendOtp(data),
+   };
+};
+
 export const changePassword = (id, data) => {
    return {
       type: actions.changePassword,

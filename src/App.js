@@ -26,6 +26,7 @@ import Profile from './pages/Profile';
 import PersonalInfo from './pages/PersonalInfo';
 import AddPhoneNumber from './pages/AddPhoneNumber';
 import ChangePassword from './pages/ChangePassword';
+import ResetPassOtp from './pages/ResetPassOtp';
 
 import SplashScreen from './pages/SplashScreen';
 
@@ -118,6 +119,7 @@ const App = () => {
             <Stack.Screen name="CreatePin" component={CreatePin} options={{ headerShown: false }} />
             <Stack.Screen name="CreatePinSuccess" component={CreatePinSuccess} options={{ headerShown: false }} />
             <Stack.Screen name="ResetPassEmail" component={ResetPassEmail} options={{ headerShown: false }} />
+            <Stack.Screen name="ResetPassOtp" component={ResetPassOtp} options={{ headerShown: false }} />
             <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>

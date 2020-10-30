@@ -48,3 +48,7 @@ export const fetchEmail = (data) => {
 export const changePassword = (id, data) => {
    return Axios.patch(`${API_URL}/auth/password/${id}`, data);
 };
+
+export const sendOtp = (data) => {
+   return Axios.post(`${API_URL}/auth/sendotp`, data);
+};
