@@ -100,7 +100,7 @@ const Profile = ({ navigation }) => {
    };
 
    useEffect(() => {
-      if (msg !== '...Loading' && msg !== '' && msg !== 'Successfully registered' && msg !== 'Successfully updated') {
+      if (msg !== '...Loading' && msg !== '') {
          ToastAndroid.show(msg, ToastAndroid.SHORT);
       }
    }, [msg]);

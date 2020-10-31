@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, StatusBar, Pressable, FlatList } from 'react-native';
+import { View, Text, StyleSheet, Image, StatusBar, Pressable, FlatList, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
@@ -97,6 +97,25 @@ const Home = ({ navigation }) => {
 
    const profilImg = `${API_URL}${photo}`;
 
+   const alertEmptyPhone = () => {
+      Alert.alert(
+         'Phone number not set',
+         'Please set up your phone number',
+         [
+            {
+               text: 'Cancel',
+            },
+            {
+               text: 'Ok',
+               onPress: () => {
+                  navigation.navigate('PersonalInfo');
+               },
+            },
+         ],
+         { cancelable: false },
+      );
+   };
+
    return (
       <View style={styles.container}>
          <StatusBar barStyle="dark-content" backgroundColor={color.backgroud} />
@@ -126,19 +145,35 @@ const Home = ({ navigation }) => {
             <Text style={styles.textPhoneNumber}>{phone === null ? 'Phone not set yet' : phone}</Text>
          </View>
          <View style={styles.buttonTransferContainer}>
-            <Button
-               title="Transfer"
-               icon={
-                  <Icon
-                     name="arrow-up"
-                     size={20}
-                     color="#608DE2"
+            {phone === null ? (
+               <Button
+                  title="Transfer"
+                  icon={
+                     <Icon
+                        name="arrow-up"
+                        size={20}
+                        color="#608DE2"
+                     />
+                  }
+                  titleStyle={{ color: color.dark, marginLeft: 16, }}
+                  buttonStyle={styles.buttonTransferTopUp}
+                  onPress={alertEmptyPhone}
+               />
+            ) : (
+                  <Button
+                     title="Transfer"
+                     icon={
+                        <Icon
+                           name="arrow-up"
+                           size={20}
+                           color="#608DE2"
+                        />
+                     }
+                     titleStyle={{ color: color.dark, marginLeft: 16, }}
+                     buttonStyle={styles.buttonTransferTopUp}
+                     onPress={() => navigation.navigate('FindReceiver')}
                   />
-               }
-               titleStyle={{ color: color.dark, marginLeft: 16, }}
-               buttonStyle={styles.buttonTransferTopUp}
-               onPress={() => navigation.navigate('FindReceiver')}
-            />
+               )}
             <Button
                title="Top Up"
                icon={
