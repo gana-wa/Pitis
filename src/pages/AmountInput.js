@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, SafeAreaView, StatusBar, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, SafeAreaView, StatusBar, TextInput, Alert } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 import Icon from 'react-native-vector-icons/Feather';
 import { useSelector, useDispatch } from 'react-redux';
@@ -21,8 +21,38 @@ const AmountInput = ({ navigation }) => {
    const { control, handleSubmit, errors } = useForm();
 
    const onSubmit = (data) => {
-      dispatch(inputAmount(data));
-      navigation.navigate('TransferConfirmation');
+      if (Number(data.amount) === 0) {
+         return;
+      } else {
+         if (Number(data.amount) < 1000) {
+            Alert.alert(
+               'Minimum transfer Rp1.000',
+               '',
+               [
+                  {
+                     text: 'Ok',
+                  },
+               ],
+               { cancelable: true },
+            );
+         } else {
+            if (data.amount > stateUser.balance) {
+               Alert.alert(
+                  'Insufficient balance',
+                  '',
+                  [
+                     {
+                        text: 'Ok',
+                     },
+                  ],
+                  { cancelable: false },
+               );
+            } else {
+               dispatch(inputAmount(data));
+               navigation.navigate('TransferConfirmation');
+            }
+         }
+      }
    };
 
    return (
