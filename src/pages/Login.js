@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
             routes: [{ name: 'Home' }],
          });
       }
-      if (msg !== '...Loading' && msg !== '' && msg !== 'Fetch Balance failed..!') {
+      if (msg !== '...Loading' && msg !== '' && msg !== 'Fetch Balance failed..!' && msg !== 'Successfully registered' && msg !== 'Successfully updated') {
          ToastAndroid.show(msg, ToastAndroid.SHORT);
       }
    }, [isLoggedIn, navigation, msg]);
