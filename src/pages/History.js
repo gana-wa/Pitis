@@ -90,50 +90,56 @@ const History = ({ navigation }) => {
    return (
       <SafeAreaView style={styles.container}>
          <StatusBar barStyle="default" backgroundColor={color.primary} />
-         <SectionList
-            sections={historyData}
-            keyExtractor={(item, index) => item + index}
-            renderItem={({ item }) => <Item data={item} />}
-            renderSectionHeader={({ section: { date, data } }) => (
-               data.length === 0 ? null :
-                  <View style={styles.section}>
-                     <Text style={styles.sectionText}>{date}</Text>
+         {stateHistory.length < 1 ? (
+            <Text style={styles.textNoHistory}>No history yet</Text>
+         ) : (
+               <>
+                  <SectionList
+                     sections={historyData}
+                     keyExtractor={(item, index) => item + index}
+                     renderItem={({ item }) => <Item data={item} />}
+                     renderSectionHeader={({ section: { date, data } }) => (
+                        data.length === 0 ? null :
+                           <View style={styles.section}>
+                              <Text style={styles.sectionText}>{date}</Text>
+                           </View>
+                     )
+                     }
+                  />
+                  <View style={styles.buttonFilterContainer}>
+                     <Button
+                        icon={
+                           <Icon
+                              name="arrow-up"
+                              size={20}
+                              color={color.error}
+                           />
+                        }
+                        titleStyle={{ color: color.error }}
+                        buttonStyle={styles.buttonFillter}
+                        containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
+                     />
+                     <Button
+                        icon={
+                           <Icon
+                              name="arrow-down"
+                              size={20}
+                              color={color.success}
+                           />
+                        }
+                        titleStyle={{ color: color.success }}
+                        buttonStyle={styles.buttonFillter}
+                        containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
+                     />
+                     <Button
+                        title="Filter by Date"
+                        titleStyle={{ color: color.primary }}
+                        buttonStyle={styles.buttonFillter}
+                        containerStyle={{ elevation: 2, flex: 6 }}
+                     />
                   </View>
-            )
-            }
-         />
-         <View style={styles.buttonFilterContainer}>
-            <Button
-               icon={
-                  <Icon
-                     name="arrow-up"
-                     size={20}
-                     color={color.error}
-                  />
-               }
-               titleStyle={{ color: color.error }}
-               buttonStyle={styles.buttonFillter}
-               containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
-            />
-            <Button
-               icon={
-                  <Icon
-                     name="arrow-down"
-                     size={20}
-                     color={color.success}
-                  />
-               }
-               titleStyle={{ color: color.success }}
-               buttonStyle={styles.buttonFillter}
-               containerStyle={{ elevation: 2, flex: 2, marginRight: 20 }}
-            />
-            <Button
-               title="Filter by Date"
-               titleStyle={{ color: color.primary }}
-               buttonStyle={styles.buttonFillter}
-               containerStyle={{ elevation: 2, flex: 6 }}
-            />
-         </View>
+               </>
+            )}
       </SafeAreaView>
    );
 };
@@ -144,6 +150,12 @@ const styles = StyleSheet.create({
       flex: 1,
       // justifyContent: 'space-evenly'
       // marginTop: 10,
+   },
+   textNoHistory: {
+      textAlign: 'center',
+      fontSize: 20,
+      marginTop: 200,
+      fontStyle: 'italic',
    },
    // header
    containerHeader: {

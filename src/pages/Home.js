@@ -152,15 +152,21 @@ const Home = ({ navigation }) => {
          <View>
             <View style={styles.divider}>
                <Text style={styles.dividerText}>Transaction History</Text>
-               <Pressable onPress={() => navigation.navigate('History')}>
-                  <Text style={styles.dividerSeeAll}>See all</Text>
-               </Pressable>
+               {stateHistory.length < 1 ? (null) : (
+                  <Pressable onPress={() => navigation.navigate('History')}>
+                     <Text style={styles.dividerSeeAll}>See all</Text>
+                  </Pressable>
+               )}
             </View>
-            <FlatList
-               data={dataHistory}
-               renderItem={({ item }) => <Item data={item} />}
-               keyExtractor={item => item.transaction_id.toString()}
-            />
+            {stateHistory.length < 1 ? (
+               <Text style={styles.textNoHistory}>(No history yet)</Text>
+            ) : (
+                  <FlatList
+                     data={dataHistory}
+                     renderItem={({ item }) => <Item data={item} />}
+                     keyExtractor={item => item.transaction_id.toString()}
+                  />
+               )}
          </View>
       </View>
    );
@@ -251,6 +257,13 @@ const styles = StyleSheet.create({
    dividerSeeAll: {
       color: color.primary,
       fontSize: 14,
+   },
+   textNoHistory: {
+      textAlign: 'center',
+      fontStyle: 'italic',
+      fontSize: 18,
+      color: color.input,
+      marginTop: 50,
    },
    containerTransaction: {
       backgroundColor: color.white,
