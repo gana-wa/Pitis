@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, StatusBar, Alert } from 'react-native';
 import { Button } from 'react-native-elements';
 import SmoothPinCodeInput from 'react-native-smooth-pincode-input';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,6 +13,7 @@ const PinConfirmation = ({ navigation }) => {
 
    const dispatch = useDispatch();
    const transactionState = useSelector(state => state.transaction.transaction);
+   const stateAuth = useSelector(state => state.auth);
 
    return (
       <SafeAreaView style={styles.container}>
@@ -21,6 +22,8 @@ const PinConfirmation = ({ navigation }) => {
             <View style={styles.topContent}>
                <Text style={styles.infoText}>Enter your 6 digits PIN for confirmation to continue transferring money. </Text>
                <SmoothPinCodeInput
+                  password mask="﹡"
+                  maskDelay={100}
                   containerStyle={styles.pinContainer}
                   cellStyle={pinValid ? styles.pinCell : styles.pinCellEmpty}
                   value={pin}
@@ -39,8 +42,21 @@ const PinConfirmation = ({ navigation }) => {
                   buttonStyle={styles.buttonSubmit}
                   titleStyle={styles.buttonSubmitText}
                   onPress={() => {
-                     navigation.navigate('TransferDetail');
-                     dispatch(transaction(transactionState));
+                     if (Number(pin) !== Number(stateAuth.pin)) {
+                        Alert.alert(
+                           'Incorrect Pin',
+                           'Please input your pin correctly',
+                           [
+                              {
+                                 text: 'Ok',
+                              },
+                           ],
+                           { cancelable: true },
+                        );
+                     } else {
+                        navigation.navigate('TransferDetail');
+                        dispatch(transaction(transactionState));
+                     }
                      // console.log(transaction);
                   }}
                />

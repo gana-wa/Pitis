@@ -183,6 +183,16 @@ const Home = ({ navigation }) => {
                      color="#608DE2"
                   />
                }
+               onPress={() => Alert.alert(
+                  'Coming Soon',
+                  'Top up coming soon',
+                  [
+                     {
+                        text: 'Ok',
+                     },
+                  ],
+                  { cancelable: true },
+               )}
                titleStyle={{ color: color.dark, marginLeft: 16, }}
                buttonStyle={styles.buttonTransferTopUp}
             />
