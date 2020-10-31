@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { Button } from 'react-native-elements';
 import { useDispatch, useSelector } from 'react-redux';
 import { API_URL, SOCKET_URL } from '../utils/environment';
-import { fetchBalance } from '../redux/actions/user';
+import { fetchBalance, showContact } from '../redux/actions/user';
 import { history } from '../redux/actions/transaction';
 import io from 'socket.io-client';
 import { setSystemSocket } from '../redux/actions/system';
@@ -56,6 +56,7 @@ const Home = ({ navigation }) => {
    const dispatch = useDispatch();
 
    useEffect(() => {
+      dispatch(showContact(user_id));
       if (stateAuth.isLoggedIn) {
          dispatch(fetchBalance(user_id));
          dispatch(history(user_id));
