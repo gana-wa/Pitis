@@ -44,6 +44,7 @@ const Item = ({ data }) => {
 
 const Home = ({ navigation }) => {
 
+   const stateAuth = useSelector(state => state.auth);
    const { first_name, last_name, phone, photo, balance, user_id } = useSelector(
       (state) => state.auth.user,
    );
@@ -55,8 +56,10 @@ const Home = ({ navigation }) => {
    const dispatch = useDispatch();
 
    useEffect(() => {
-      dispatch(fetchBalance(user_id));
-      dispatch(history(user_id));
+      if (stateAuth.isLoggedIn) {
+         dispatch(fetchBalance(user_id));
+         dispatch(history(user_id));
+      } else { return }
    }, [dispatch, user_id]);
 
    useEffect(() => {

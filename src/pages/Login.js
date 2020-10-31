@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { Input } from 'react-native-elements';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/actions/auth';
+import { login, clearState } from '../redux/actions/auth';
 
 import styles from '../styles/Login';
 import * as color from '../styles/colorStyles';
@@ -24,7 +24,7 @@ const Login = ({ navigation }) => {
             routes: [{ name: 'Home' }],
          });
       }
-      if (msg !== '...Loading' && msg !== '') {
+      if (msg !== '...Loading' && msg !== '' && msg !== 'Fetch Balance failed..!') {
          ToastAndroid.show(msg, ToastAndroid.SHORT);
       }
    }, [isLoggedIn, navigation, msg]);
@@ -91,7 +91,7 @@ const Login = ({ navigation }) => {
                         rightIcon={
                            <Icon
                               onPress={handleShowPassword}
-                              name={showPassword ? "eye-off" : "eye"}
+                              name={showPassword ? 'eye-off' : 'eye'}
                               size={18}
                               color={color.input}
                            />

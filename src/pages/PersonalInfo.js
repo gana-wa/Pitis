@@ -36,11 +36,7 @@ const PersonalInfo = ({ navigation }) => {
          <View style={styles.profileContainer}>
             <View style={styles.textContainer}>
                <Text style={styles.textTitle}>Verified E-mail</Text>
-               {last_name === null ? (
-                  <Text style={styles.textItemNull}>Not set</Text>
-               ) : (
-                     <Text style={styles.textItem}>{email}</Text>
-                  )}
+               <Text style={styles.textItem}>{email}</Text>
             </View>
          </View>
          <View style={styles.profileContainer}>
